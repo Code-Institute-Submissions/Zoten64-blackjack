@@ -1,7 +1,7 @@
 # Import statements
 import random
 
-# Variables
+# Global variables
 
 # code taken here:
 # https://www.geeksforgeeks.org/how-to-print-a-deck-of-cards-in-python/
@@ -12,8 +12,25 @@ suits = ["\u2663", "\u2665",
 ranks = ['A', '2', '3', '4', '5',
          '6', '7', '8', '9', '10',
          'J', 'Q', 'K']
+#A dictonary determining the value of each card rank.
+card_value = {
+    "A": 11,
+    "2": 2,
+    "3": 3,
+    "4": 4,
+    "5": 5,
+    "6": 6,
+    "7": 7,
+    "8": 8,
+    "9": 9,
+    "10": 10,
+    "J": 10,
+    "Q": 10,
+    "K": 10
+}
 dealers_score = 0
 players_score = 0
+credits = 1000
 deck_count = 0
 
 # Functions
@@ -66,7 +83,7 @@ def how_to_play():
     """
     Explains the basics of the game to the user
     """
-    #Empty prints makes a space to make the output more readable
+    # Empty prints makes a space to make the output more readable
     print("How to play:")
     print()
     print("Your goal is to try and beat the dealer by having your total "
@@ -78,7 +95,7 @@ def how_to_play():
     print()
     print("You will recieve 2 cards to start with. The dealer will have "
           "one card facing up and one card facing down. Based on this "
-          "you can make a guess of how many points the dealer might have " 
+          "you can make a guess of how many points the dealer might have "
           "to determine your next move \n"
           "You have the option to either hit or stand. If you hit "
           "you will be given another card. If you stand the dealer will "
@@ -92,9 +109,8 @@ def how_to_play():
     print()
     print("At the start of the game you'll place a bet. If you win you "
           "get double your bet back. \n"
-          "If your two starting cards has a value of 21 you will immediately " 
+          "If your two starting cards has a value of 21 you will immediately "
           "get 1.5x your bet back. This is called a natural blackjack")
-    
 
 
 # Starter code

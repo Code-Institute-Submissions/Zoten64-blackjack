@@ -12,6 +12,9 @@ suits = ["\u2663", "\u2665",
 ranks = ['A', '2', '3', '4', '5',
          '6', '7', '8', '9', '10',
          'J', 'Q', 'K']
+dealers_score = 0
+players_score = 0
+deck_count = 0
 
 # Functions
 
@@ -34,5 +37,25 @@ def generate_deck(number_of_decks):
     return temp_deck
 
 
-deck = generate_deck(1)
-print(deck)
+#Starter code
+
+print("How many decks do you want to play with? If unsure enter 1")
+#This will loop the code until the player enters a valid number
+while True:
+    try:
+        deck_count = input()
+        if int(deck_count) > 0:
+            #if the number is valid it breaks out of the loop
+            break
+        else:
+            print(f"You cannot play with {deck_count} decks. " 
+                  "Enter a number above 0")
+    except:
+        #If there's an error, most likely because the player did not
+        #Enter an integer, this will run
+        print("Input has to be a whole number. Try again:")
+
+#temporary testing code
+deck = generate_deck(int(deck_count))
+print(deck, len(deck))
+    

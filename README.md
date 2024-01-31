@@ -27,6 +27,7 @@
 
 | Bug  | Fix |
 | ------------- | ------------- |
+| highest_value does not change inside anarchy_mode function | Added global keyword before the variable |
 
 
 ## Technologies and tools

@@ -13,7 +13,7 @@ ranks = ['A', '2', '3', '4', '5',
          '6', '7', '8', '9', '10',
          'J', 'Q', 'K']
 #A dictonary determining the value of each card rank.
-card_value = {
+default_card_value = {
     "A": 11,
     "2": 2,
     "3": 3,
@@ -28,6 +28,8 @@ card_value = {
     "Q": 10,
     "K": 10
 }
+card_value = default_card_value
+highest_value = 21
 dealers_score = 0
 players_score = 0
 credits = 1000
@@ -112,6 +114,23 @@ def how_to_play():
           "If your two starting cards has a value of 21 you will immediately "
           "get 1.5x your bet back. This is called a natural blackjack")
 
+def anarchy_mode():
+    """
+    A mode where the player gets to decide what value each card has as well as
+    what value the cards needs to exceed in order to bust.
+    """
+    #Temp_value is a temporary variable that takes use input and uses that
+    #data to set the values.
+    temp_value = input("Max value (default 21): ")
+
+    global highest_value
+    highest_value = int(temp_value)
+    for i in card_value.keys():
+        temp_value = input(f"Value of {i} (default: {default_card_value[i]}): ")
+        card_value[i] = int(temp_value)
+    
 
 # Starter code
-how_to_play()
+anarchy_mode()
+print(card_value)
+print(highest_value)

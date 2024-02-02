@@ -5,12 +5,12 @@ from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
-#Load the .env file before anything else
+# Load the .env file before anything else
 load_dotenv()
 
 
 # Global variables
-#Get database credentials and create connection to database
+# Get database credentials and create connection to database
 DBCREDS = os.getenv('DBCREDS')
 client = MongoClient(DBCREDS, server_api=ServerApi('1'))
 # code taken here:
@@ -22,7 +22,7 @@ suits = ["\u2663", "\u2665",
 ranks = ['A', '2', '3', '4', '5',
          '6', '7', '8', '9', '10',
          'J', 'Q', 'K']
-#A dictonary determining the value of each card rank.
+# A dictonary determining the value of each card rank.
 default_card_value = {
     "A": 11,
     "2": 2,
@@ -44,9 +44,11 @@ dealers_score = 0
 players_score = 0
 credits = 1000
 deck_count = 1
-deck = [] 
+deck = []
 
 # Functions
+
+
 def test_database_connection():
     """
     Tests the database connection for any errors

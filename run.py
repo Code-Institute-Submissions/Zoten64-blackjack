@@ -33,7 +33,8 @@ highest_value = 21
 dealers_score = 0
 players_score = 0
 credits = 1000
-deck_count = 0
+deck_count = 1
+deck = [] 
 
 # Functions
 
@@ -64,6 +65,7 @@ def deck_number():
     # This will loop the code until the player enters a valid number
     while True:
         try:
+            global deck_count
             deck_count = input()
             if int(deck_count) > 0:
                 # if the number is valid it breaks out of the loop
@@ -77,6 +79,7 @@ def deck_number():
             print("Input has to be a whole number. Try again:")
 
     # temporary testing code
+
     deck = generate_deck(int(deck_count))
     print(deck, len(deck))
 
@@ -113,6 +116,9 @@ def how_to_play():
           "get double your bet back. \n"
           "If your two starting cards has a value of 21 you will immediately "
           "get 1.5x your bet back. This is called a natural blackjack")
+    
+    #To ensure that the game doesn't proceed so that the user has time to read
+    input("Press enter to continue..")
 
 def anarchy_mode():
     """
@@ -130,7 +136,43 @@ def anarchy_mode():
         card_value[i] = int(temp_value)
     
 
+def settings():
+    """
+    This will be run when the user runs a settings command
+    """
+    print("This is currently not functional. Come back later")
+
+def print_board():
+    """
+    Prints the board
+    """
+
+    print("This is not the actual board, this is temporary testing.")
+
+    print("Money:", credits)
+    print("Card values:", card_value)
+    print("Highest winning value:", highest_value)
+    print("Dealer:", dealers_score)
+    print("Player:", players_score)
+    print(deck)
+    print(deck_count)
+
 # Starter code
-anarchy_mode()
-print(card_value)
-print(highest_value)
+
+
+
+while True:
+    deck = generate_deck(deck_count)
+    print_board()
+    print("commands:")
+
+    user_command = input()
+
+    if(user_command == "settings"):
+        settings()
+    elif(user_command == "help"):
+        how_to_play()
+    elif(user_command == "set deck"):
+        deck_number()
+    
+    

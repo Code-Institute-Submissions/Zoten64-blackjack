@@ -1,6 +1,6 @@
 # Blackjack in a Python console
 
-## [Link to website]()
+## [Link to website](https://zoten64-blackjack-f933aa260542.herokuapp.com/)
 
 ## Table of Contents:
 
@@ -38,6 +38,13 @@
 - Git/github
 - Visual Studio Code
 - Pip
+- MongoDB
+
+**Python Libraries**
+- Random
+- OS
+- Python-dotenv
+- pymongo
 
 
 ## Validation and testing

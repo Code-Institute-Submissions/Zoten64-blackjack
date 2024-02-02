@@ -55,5 +55,8 @@ def test_database_connection():
     """
     try:
         client.admin.command('ping')
+        print("Database connected")
     except Exception as e:
         print("Database exception:", e)
+
+test_database_connection()

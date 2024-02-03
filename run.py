@@ -11,7 +11,7 @@ load_dotenv()
 
 # Global variables
 # Get database credentials and create connection to database
-DBCREDS = os.getenv('DBCREDS')
+DBCREDS = os.getenv('DATABASECREDS')
 client = MongoClient(DBCREDS, server_api=ServerApi('1'))
 # code taken here:
 # https://www.geeksforgeeks.org/how-to-print-a-deck-of-cards-in-python/

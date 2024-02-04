@@ -67,54 +67,65 @@ def connect_to_DB():
 
 def try_again(prompt):
     ans = input(prompt).lower()
-    if(ans == "y"):
+    if (ans == "y"):
         return True
-    elif(ans == "n"):
+    elif (ans == "n"):
         return False
     else:
         print("Invalid option.")
 
+
 def create_account():
     '''Create an account and put it into the database'''
-
+    # Username or Password will equal "interrupted" if the user cancels
+    # either of the retries when an input is invalid
+    # In this case return makes the function stop running
     username = create_username()
-    #Username will equal "interrupted" if the user cancels
-    #In this case return makes the function stop running
-    if(username == "interrupted"):
+    if (username == "interrupted"):
         return
-    #This will loop until the passwords matches or the user cancels
-    # Pwinput is used here to make the password hidden when the
-    # user is typing it
-    password = pwinput.pwinput(prompt="Password: ", mask="*")
-    password_confirm = pwinput.pwinput(prompt="Confirm password: ", mask="*")
-    
-    #Makes sure that the passwords match before continuing
-    if(password == password_confirm):
-        hashed_pw = hash_password(password)
+
+    password = create_password()
+    if (password == "interrupted"):
+        return
+    else:
         # The data is made into a dictionary and put into the db
-        data = {"username": username, "password": hashed_pw}
+        data = {"username": username, "password": password}
         db["player"].insert_one(data)
 
 
-
-
-# Both password functions reference this tutorial:
-# https://www.geeksforgeeks.org/hashing-passwords-in-python-with-bcrypt/
-
 def create_username():
-    '''Checks for username availability.'''
+    '''Lets user create a username'''
 
-    #Repeats until an available username is found or the user cancels
+    # Repeats until an available username is found or the user cancels
+    # If an available username is found it returns it
     while True:
         username = input("username: ")
         if username_exists(username) == True:
             ans = try_again("Username is taken. Try again? Y/N: ")
-            if(ans == False):
+            if (ans == False):
                 return "interrupted"
         else:
             return username
-                
+        
+def create_password():
+    '''Lets user create a password'''
+    # This will loop until the passwords matches or the user cancels
+    # Pwinput is used here to make the password hidden when the
+    # user is typing it
+    while True:
+        password = pwinput.pwinput(prompt="Password: ", mask="*")
+        password_confirm = pwinput.pwinput(prompt="Confirm password: ", 
+                                           mask="*")
+        
+        if(password == password_confirm):
+            return hash_password(password)
+        else:
+            ans = try_again("Passwords do not match. Try again? Y/N: ")
+            if (ans == False):
+                return "interrupted"
 
+# Both hash and check password functions reference this tutorial:
+# https://www.geeksforgeeks.org/hashing-passwords-in-python-with-bcrypt/
 def hash_password(password):
     '''Hashes the password'''
     # Converts the password to bytes
@@ -134,14 +145,16 @@ def check_password(password, hash):
     # Checks if the password matches
     print(bcrypt.checkpw(bytes, hash))
 
+
 def username_exists(username):
     '''Checks if a username exists'''
-    #Counts the amount of documents containing the username.
-    #If the amount is not 0 the username is taken
+    # Counts the amount of documents containing the username.
+    # If the amount is not 0 the username is taken
     if (db["player"].count_documents({"username": username})) == 0:
         return False
-    else: 
+    else:
         return True
+
 
 def log_in():
     print("Non functional")

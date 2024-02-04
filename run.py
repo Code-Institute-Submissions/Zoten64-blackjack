@@ -1,6 +1,7 @@
 # Import statements
 import random
 import os
+import bcrypt
 import pwinput
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
@@ -72,9 +73,28 @@ def create_account():
     # user is typing it
     password = pwinput.pwinput(mask="*")
 
-    #The data is made into a dictionary and put into the db
+    # The data is made into a dictionary and put into the db
     data = {"username": username, "password": password}
     db["player"].insert_one(data)
 
-connect_to_DB()
-create_account()
+# Both password functions reference this tutorial:
+# https://www.geeksforgeeks.org/hashing-passwords-in-python-with-bcrypt/
+
+
+def hash_password(password):
+    '''Hashes the password'''
+    # Converts the password to bytes
+    bytes = password.encode("utf-8")
+    # Generates salt for a more secure encryption
+    salt = bcrypt.gensalt()
+    # Finally hashes the password
+    hash = bcrypt.hashpw(bytes, salt)
+
+
+
+def check_password(password):
+    '''Checks if the password is correct'''
+    bytes = password.encode("utf-8")
+
+    print(bcrypt.checkpw(bytes, hash))
+

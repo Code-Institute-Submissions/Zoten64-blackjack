@@ -67,8 +67,20 @@ def connect_to_DB():
 
 def create_account():
     '''Create an account and put it into the database'''
-
-    username = input("username: ")
+    #Checks for username availability. Repeats until
+    #An available username is found or the user cancels
+    while True:
+        username = input("username: ")
+        if username_exists(username) == False:
+            break
+        else:
+            ans = input("Username is taken. Try again? Y/N: ")
+            if(ans.lower() == "y"):
+                continue
+            else:
+                break
+    
+    #This will loop until the passwords matches or the user cancels
     while True:
         # Pwinput is used here to make the password hidden when the
         # user is typing it
@@ -114,6 +126,14 @@ def check_password(password, hash):
     # Checks if the password matches
     print(bcrypt.checkpw(bytes, hash))
 
+def username_exists(username):
+    '''Checks if a username exists'''
+    #Counts the amount of documents containing the username.
+    #If the amount is not 0 the username is taken
+    if (db["player"].count_documents({"username": username})) == 0:
+        return False
+    else: 
+        return True
 
 def log_in():
     print("Non functional")

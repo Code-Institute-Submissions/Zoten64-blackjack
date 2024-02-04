@@ -27,7 +27,7 @@
 
 | Bug  | Fix |
 | ------------- | ------------- |
-| highest_value does not change inside anarchy_mode function | Added global keyword before the variable |
+| Entered username is always taken according to the script | True and False statements were mixed up |
 
 
 ## Technologies and tools

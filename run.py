@@ -72,9 +72,9 @@ def create_account():
     # Pwinput is used here to make the password hidden when the
     # user is typing it
     password = pwinput.pwinput(mask="*")
-
+    hashed_pw = hash_password(password)
     # The data is made into a dictionary and put into the db
-    data = {"username": username, "password": password}
+    data = {"username": username, "password": hashed_pw}
     db["player"].insert_one(data)
 
 # Both password functions reference this tutorial:
@@ -90,11 +90,16 @@ def hash_password(password):
     # Finally hashes the password
     hash = bcrypt.hashpw(bytes, salt)
 
+    return hash
 
 
-def check_password(password):
+def check_password(password, hash):
     '''Checks if the password is correct'''
+    # Converts the password into bytes
     bytes = password.encode("utf-8")
-
+    # Checks if the password matches
     print(bcrypt.checkpw(bytes, hash))
 
+
+connect_to_DB()
+create_account()

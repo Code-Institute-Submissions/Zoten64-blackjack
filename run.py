@@ -51,7 +51,7 @@ def connect_to_DB():
     load_dotenv()
 
     # Get database credentials and create connection to database
-    DBCREDS = os.getenv('DBCREDS')
+    DBCREDS = os.getenv('DBCREDS') + "=true&w=majority"
     global db_client
     db_client = MongoClient(DBCREDS, server_api=ServerApi('1'))
     global db

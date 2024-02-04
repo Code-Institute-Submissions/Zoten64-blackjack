@@ -65,44 +65,47 @@ def connect_to_DB():
         print("Database exception:", e)
 
 
+def try_again(prompt):
+    ans = input(prompt).lower()
+    if(ans == "y"):
+        return True
+    elif(ans == "n"):
+        return False
+    else:
+        print("Invalid option.")
+
 def create_account():
     '''Create an account and put it into the database'''
     #Checks for username availability. Repeats until
     #An available username is found or the user cancels
     while True:
         username = input("username: ")
-        if username_exists(username) == False:
-            break
-        else:
-            ans = input("Username is taken. Try again? Y/N: ")
-            if(ans.lower() == "y"):
-                continue
-            else:
+        if username_exists(username) == True:
+            ans = try_again("Username is taken. Try again? Y/N: ")
+            if(ans == False):
                 break
     
-    #This will loop until the passwords matches or the user cancels
-    while True:
-        # Pwinput is used here to make the password hidden when the
-        # user is typing it
-        password = pwinput.pwinput(prompt="Password: ", mask="*")
-        password_confirm = pwinput.pwinput(prompt="Confirm password: ", 
-                                           mask="*")
-        
-        #Makes sure that the passwords match before continuing
-        if(password == password_confirm):
-            hashed_pw = hash_password(password)
-            # The data is made into a dictionary and put into the db
-            data = {"username": username, "password": hashed_pw}
-            db["player"].insert_one(data)
-            break
-        else:
-            #Gives the user the option to try again
-            ans = input("Passwords do not match. Try again? Y/N: ")
-            if(ans.lower() == "y"):
-                continue
-            else:
+        #This will loop until the passwords matches or the user cancels
+        while True:
+            # Pwinput is used here to make the password hidden when the
+            # user is typing it
+            password = pwinput.pwinput(prompt="Password: ", mask="*")
+            password_confirm = pwinput.pwinput(prompt="Confirm password: ", 
+                                            mask="*")
+            
+            #Makes sure that the passwords match before continuing
+            if(password == password_confirm):
+                hashed_pw = hash_password(password)
+                # The data is made into a dictionary and put into the db
+                data = {"username": username, "password": hashed_pw}
+                db["player"].insert_one(data)
                 break
-
+            else:
+                #Gives the user the option to try again
+                ans = try_again("Username is taken. Try again? Y/N: ")
+                if(ans == False):
+                    break
+        break
 # Both password functions reference this tutorial:
 # https://www.geeksforgeeks.org/hashing-passwords-in-python-with-bcrypt/
 

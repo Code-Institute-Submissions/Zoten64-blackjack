@@ -1,18 +1,13 @@
 # Import statements
 import random
 import os
+import pwinput
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
-# Load the .env file before anything else
-load_dotenv()
-
-
 # Global variables
-# Get database credentials and create connection to database
-DBCREDS = os.getenv('DATABASECREDS')
-client = MongoClient(DBCREDS, server_api=ServerApi('1'))
+
 # code taken here:
 # https://www.geeksforgeeks.org/how-to-print-a-deck-of-cards-in-python/
 # a list of all the suits in unicode. Resulting characters: ♣ ♥ ♦ ♠
@@ -49,14 +44,37 @@ deck = []
 # Functions
 
 
-def test_database_connection():
-    """
-    Tests the database connection for any errors
-    """
+def connect_to_DB():
+    '''Connect to the MongoDB database'''
+    # Load the .env file before anything else
+    load_dotenv()
+
+    # Get database credentials and create connection to database
+    DBCREDS = os.getenv('DBCREDS')
+    global db_client
+    db_client = MongoClient(DBCREDS, server_api=ServerApi('1'))
+    global db
+    db = db_client["blackjack"]
+
+    # Try if the database can be accessed
     try:
-        client.admin.command('ping')
+        db_client.admin.command('ping')
         print("Database connected")
     except Exception as e:
         print("Database exception:", e)
 
-test_database_connection()
+
+def create_account():
+    '''Create an account and put it into the database'''
+
+    username = input("username: ")
+    # Pwinput is used here to make the password hidden when the
+    # user is typing it
+    password = pwinput.pwinput(mask="*")
+
+    #The data is made into a dictionary and put into the db
+    data = {"username": username, "password": password}
+    db["player"].insert_one(data)
+
+connect_to_DB()
+create_account()

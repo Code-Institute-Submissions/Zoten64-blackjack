@@ -36,6 +36,7 @@
 
 **Tools**
 - Git/github
+- Heroku
 - Visual Studio Code
 - Pip
 - MongoDB
@@ -45,6 +46,10 @@
 - OS
 - Python-dotenv
 - pymongo
+- dnspython
+- pwinput
+- bcrypt
+
 
 
 ## Validation and testing

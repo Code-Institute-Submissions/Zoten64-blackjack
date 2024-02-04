@@ -69,13 +69,27 @@ def create_account():
     '''Create an account and put it into the database'''
 
     username = input("username: ")
-    # Pwinput is used here to make the password hidden when the
-    # user is typing it
-    password = pwinput.pwinput(mask="*")
-    hashed_pw = hash_password(password)
-    # The data is made into a dictionary and put into the db
-    data = {"username": username, "password": hashed_pw}
-    db["player"].insert_one(data)
+    while True:
+        # Pwinput is used here to make the password hidden when the
+        # user is typing it
+        password = pwinput.pwinput(prompt="Password: ", mask="*")
+        password_confirm = pwinput.pwinput(prompt="Confirm password: ", 
+                                           mask="*")
+        
+        #Makes sure that the passwords match before continuing
+        if(password == password_confirm):
+            hashed_pw = hash_password(password)
+            # The data is made into a dictionary and put into the db
+            data = {"username": username, "password": hashed_pw}
+            db["player"].insert_one(data)
+            break
+        else:
+            #Gives the user the option to try again
+            ans = input("Passwords do not match. Try again? Y/N: ")
+            if(ans.lower() == "y"):
+                continue
+            else:
+                break
 
 # Both password functions reference this tutorial:
 # https://www.geeksforgeeks.org/hashing-passwords-in-python-with-bcrypt/
@@ -99,6 +113,10 @@ def check_password(password, hash):
     bytes = password.encode("utf-8")
     # Checks if the password matches
     print(bcrypt.checkpw(bytes, hash))
+
+
+def log_in():
+    print("Non functional")
 
 
 connect_to_DB()

@@ -28,7 +28,8 @@
 | Bug  | Fix |
 | ------------- | ------------- |
 | Entered username is always taken according to the script | True and False statements were mixed up |
-
+| Credentials in the .env file keeps on getting messed up on import as it removes vital options | Delete options from the .env file and append them to the DBCREDS string in run.py. The options are not sensitive information |
+| The password part of the create_account function runs despite create_username returning "interrupted"  | "interrupted" was misspelt as "inerrupted"|
 
 ## Technologies and tools
 **Languages**

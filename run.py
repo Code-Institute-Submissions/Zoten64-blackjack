@@ -106,7 +106,8 @@ def create_username():
                 return "interrupted"
         else:
             return username
-        
+
+
 def create_password():
     '''Lets user create a password'''
     # This will loop until the passwords matches or the user cancels
@@ -114,10 +115,10 @@ def create_password():
     # user is typing it
     while True:
         password = pwinput.pwinput(prompt="Password: ", mask="*")
-        password_confirm = pwinput.pwinput(prompt="Confirm password: ", 
+        password_confirm = pwinput.pwinput(prompt="Confirm password: ",
                                            mask="*")
-        
-        if(password == password_confirm):
+
+        if (password == password_confirm):
             return hash_password(password)
         else:
             ans = try_again("Passwords do not match. Try again? Y/N: ")
@@ -126,6 +127,8 @@ def create_password():
 
 # Both hash and check password functions reference this tutorial:
 # https://www.geeksforgeeks.org/hashing-passwords-in-python-with-bcrypt/
+
+
 def hash_password(password):
     '''Hashes the password'''
     # Converts the password to bytes
@@ -143,7 +146,8 @@ def check_password(password, hash):
     # Converts the password into bytes
     bytes = password.encode("utf-8")
     # Checks if the password matches
-    print(bcrypt.checkpw(bytes, hash))
+    if(bytes == hash):
+        return True
 
 
 def username_exists(username):
@@ -157,8 +161,21 @@ def username_exists(username):
 
 
 def log_in():
-    print("Non functional")
+    '''Prompts the user for login information'''
+    while True:
+        username = input("Username: ")
+        #If the username does not exist this will run
+        if username_exists(username) == False:
+            # If the username is invalid the user will be prompted
+            # to try again or cancel
+            ans = try_again("invalid username. Try again? Y/N: ")
+            if (ans == False):
+                break
+            else:
+                #Makes it loop back to the start
+                continue
+
 
 
 connect_to_DB()
-create_account()
+log_in()

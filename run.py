@@ -100,7 +100,7 @@ def create_username():
     # If an available username is found it returns it
     while True:
         username = input("username: ")
-        if username_exists(username) == True:
+        if username_exists(username):
             ans = try_again("Username is taken. Try again? Y/N: ")
             if (ans == False):
                 return "interrupted"
@@ -141,14 +141,6 @@ def hash_password(password):
     return hash
 
 
-def check_password(password, hash):
-    '''Checks if the password is correct'''
-    # Converts the password into bytes
-    bytes = password.encode("utf-8")
-    # Checks if the password matches
-    if(bytes == hash):
-        return True
-
 
 def username_exists(username):
     '''Checks if a username exists'''
@@ -158,6 +150,18 @@ def username_exists(username):
         return False
     else:
         return True
+
+def check_password(password, username):
+    '''Checks if the password is correct'''
+    # Converts the password into bytes
+    bytes = password.encode("utf-8")
+    hash = db["player"].find_one({"username" : username},
+                            {"password": True})["password"]
+    # Checks if the password matches
+    if(bcrypt.checkpw(bytes, hash)):
+        return True
+    else:
+        return False
 
 
 def log_in():
@@ -174,6 +178,21 @@ def log_in():
             else:
                 #Makes it loop back to the start
                 continue
+        
+        while True:
+            password = pwinput.pwinput(prompt="Password: ", mask="*")
+            check_password(password, username)
+            if (check_password(password, username)):
+                print(f"Welcome {username}.")
+                break
+            else:
+                ans = try_again("invalid password. Try again? Y/N: ")
+                if (ans == False):
+                    break
+                else:
+                    #Makes it loop back to the start
+                    continue
+        break
 
 
 

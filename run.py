@@ -42,6 +42,9 @@ credits = 1000
 deck_count = 1
 deck = []
 
+# Classes
+
+
 # Functions
 # Login related functions
 
@@ -177,8 +180,7 @@ def log_in():
         if username_exists(username) == False:
             # If the username is invalid the user will be prompted
             # to try again or cancel
-            ans = try_again("invalid username. Try again? Y/N: ")
-            if (ans == False):
+            if (try_again("invalid username. Try again? Y/N: ") == False):
                 break
             else:
                 # Makes it loop back to the start
@@ -191,8 +193,7 @@ def log_in():
                 print(f"Welcome {username}.")
                 break
             else:
-                ans = try_again("invalid password. Try again? Y/N: ")
-                if (ans == False):
+                if (try_again("invalid password. Try again? Y/N: ") == False):
                     break
                 else:
                     # Makes it loop back to the start
@@ -203,6 +204,39 @@ def log_in():
 
 # Game functions
 
+def generate_deck(number_of_decks):
+    """
+    Generates a list of all the cards. Takes the argument 'number_of_decks'
+    to determine the amount of decks to pick cards from.
+    """
+    # Code referenced from here:
+    # https://www.geeksforgeeks.org/how-to-print-a-deck-of-cards-in-python/
+    # Code has been changed slightly to fit this function
+    # A temporary deck is created in order to not risk overwriting any
+    # existing deck variable. This will be returned at the end of the function.
+    temp_deck = []
+    for i in range(number_of_decks):
+        for suit in suits:
+            for rank in ranks:
+                temp_deck.append(rank + suit)
+    return temp_deck
 
-connect_to_DB()
-print(log_in())
+
+#This code is temporary, but might be reused later
+while True:
+    try:
+        ans = int(input("How many decks?: "))
+        #If the player chooses a number below 1 it loops back to the start
+        if(ans < 1):
+            print(f"You can't play with {ans} number of decks"
+                  "Choose a number that is at least 1.")
+            continue
+        else:
+            print(generate_deck(ans))
+            break
+    except:
+        #The error will most likely be a variable type conversion error
+        print("Input has to be a number.")
+        #The code will loop back to the begginning of the loop
+        continue
+

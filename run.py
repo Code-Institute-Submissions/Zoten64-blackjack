@@ -204,6 +204,7 @@ def log_in():
 
 # Game functions
 
+
 def generate_deck(number_of_decks):
     """
     Generates a list of all the cards. Takes the argument 'number_of_decks'
@@ -222,21 +223,40 @@ def generate_deck(number_of_decks):
     return temp_deck
 
 
-#This code is temporary, but might be reused later
-while True:
-    try:
-        ans = int(input("How many decks?: "))
-        #If the player chooses a number below 1 it loops back to the start
-        if(ans < 1):
-            print(f"You can't play with {ans} number of decks"
-                  "Choose a number that is at least 1.")
+def custom_deck():
+    '''
+    Let's the user choose how many decks to play with
+    Many casinos use multiple decks to throw off certain strategies
+    '''
+    # The code loops until a valid value has been put in
+    # ans = the user's input. Short for answer
+    while True:
+        try:
+            print("Casinos typically use multiple decks for more"
+                  " cards to pick from. Default is 6. \n"
+                  "Type Cancel or C to cancel.")
+            ans = input("How many decks?: ")
+            # .lower() is used to make the if statement case insensitive
+            if (ans.lower() == "cancel" or ans.lower == "c"):
+                break
+            else:
+                # If the player chooses a number below 1 it
+                # loops back to the start
+                if (int(ans < 1)):
+                    print(f"You can't play with {ans} number of decks."
+                          " Choose a number that is at least 1.")
+                    continue
+                else:
+                    # If everything goes through the function
+                    # will return the deck
+                    return generate_deck(ans)
+        except:
+            # The error will most likely be a variable type conversion error
+            print("Input has to be a number.")
+            # The code will loop back to the begginning of the loop
             continue
-        else:
-            print(generate_deck(ans))
-            break
-    except:
-        #The error will most likely be a variable type conversion error
-        print("Input has to be a number.")
-        #The code will loop back to the begginning of the loop
-        continue
 
+
+# This code is temporary, but might be reused later
+
+custom_deck()

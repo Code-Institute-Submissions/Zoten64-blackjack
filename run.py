@@ -43,6 +43,7 @@ deck_count = 1
 deck = []
 
 # Functions
+# Login related functions
 
 
 def connect_to_DB():
@@ -66,6 +67,11 @@ def connect_to_DB():
 
 
 def try_again(prompt):
+    '''
+    The user will be asked if they want to try again
+    The prompt variable will be printed making this code reuseable
+    '''
+
     ans = input(prompt).lower()
     if (ans == "y"):
         return True
@@ -98,11 +104,11 @@ def create_username():
 
     # Repeats until an available username is found or the user cancels
     # If an available username is found it returns it
+    # If the user cancels the function will return "interrupted"
     while True:
         username = input("username: ")
         if username_exists(username):
-            ans = try_again("Username is taken. Try again? Y/N: ")
-            if (ans == False):
+            if (try_again("Username is taken. Try again? Y/N: ") == False):
                 return "interrupted"
         else:
             return username
@@ -121,8 +127,7 @@ def create_password():
         if (password == password_confirm):
             return hash_password(password)
         else:
-            ans = try_again("Passwords do not match. Try again? Y/N: ")
-            if (ans == False):
+            if (try_again("Passwords do not match. Try again? Y/N: ") == False):
                 return "interrupted"
 
 # Both hash and check password functions reference this tutorial:
@@ -141,7 +146,6 @@ def hash_password(password):
     return hash
 
 
-
 def username_exists(username):
     '''Checks if a username exists'''
     # Counts the amount of documents containing the username.
@@ -151,14 +155,15 @@ def username_exists(username):
     else:
         return True
 
+
 def check_password(password, username):
     '''Checks if the password is correct'''
     # Converts the password into bytes
     bytes = password.encode("utf-8")
-    hash = db["player"].find_one({"username" : username},
-                            {"password": True})["password"]
+    hash = db["player"].find_one({"username": username},
+                                 {"password": True})["password"]
     # Checks if the password matches
-    if(bcrypt.checkpw(bytes, hash)):
+    if (bcrypt.checkpw(bytes, hash)):
         return True
     else:
         return False
@@ -168,7 +173,7 @@ def log_in():
     '''Prompts the user for login information'''
     while True:
         username = input("Username: ")
-        #If the username does not exist this will run
+        # If the username does not exist this will run
         if username_exists(username) == False:
             # If the username is invalid the user will be prompted
             # to try again or cancel
@@ -176,9 +181,9 @@ def log_in():
             if (ans == False):
                 break
             else:
-                #Makes it loop back to the start
+                # Makes it loop back to the start
                 continue
-        
+
         while True:
             password = pwinput.pwinput(prompt="Password: ", mask="*")
             check_password(password, username)
@@ -190,11 +195,14 @@ def log_in():
                 if (ans == False):
                     break
                 else:
-                    #Makes it loop back to the start
+                    # Makes it loop back to the start
                     continue
-        break
+        # If everything goes through the function returns the username
+        return username
+    return "unsuccessful"
 
+# Game functions
 
 
 connect_to_DB()
-log_in()
+print(log_in())

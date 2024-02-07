@@ -30,6 +30,9 @@
 | Entered username is always taken according to the script | True and False statements were mixed up |
 | Credentials in the .env file keeps on getting messed up on import as it removes vital options | Delete options from the .env file and append them to the DBCREDS string in run.py. The options are not sensitive information |
 | The password part of the create_account function runs despite create_username returning "interrupted"  | "interrupted" was misspelt as "inerrupted"|
+| Script always outputs that the number of decks needs to be a number despite a number being put in | The conversion to int was not proper. int(ans > 0) instead of int(ans) > 0 making it try and compare a string and an integer before converting to an integer|
+| String does not convert to int | Convert the string before the if statement |
+| "c" for cancel does not work | Missing () after .lower |
 
 ## Technologies and tools
 **Languages**

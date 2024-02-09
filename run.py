@@ -40,6 +40,7 @@ dealers_score = 0
 players_score = 0
 credits = 1000
 deck_count = 1
+global deck
 
 
 # Functions
@@ -98,6 +99,7 @@ class account:
             # The data is made into a dictionary and put into the db
             data = {"username": username, "password": password}
             db["player"].insert_one(data)
+            return "success"
 
     def create_username():
         '''Lets user create a username'''
@@ -303,17 +305,27 @@ def custom_deck():
             # The code will loop back to the begginning of the loop
             continue
 
-
+def login_or_create():
+    '''
+    Asks the user if they want to create an account or log in. Loops
+    until a valid answer has been given
+    '''
+    while True:
+        ans = input("Login or Create account?: \n"
+                    "Options: \n - login \n - create \n")
+        
+        if ans.lower() == "login":
+            if account.log_in() != "unsuccessful":
+                break
+        elif ans.lower() == "create":
+            if account.create_account() == "success":
+                break
+        else:
+            print("Invalid choice")
 
 
 # This code is temporary, but might be reused later
-
-global deck
-deck = game.generate_deck(1)
-
-player_cards = []
-
-
-player_value = game.calc_value(player_cards, card_value)
+connect_to_DB()
+login_or_create()
 
 

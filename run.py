@@ -218,6 +218,7 @@ class game:
             value = card_value[rank]
             total_value = total_value + value
         return total_value
+    
 
 
 # Functions
@@ -241,7 +242,7 @@ def connect_to_DB():
         print("Database exception:", e)
 
 
-def print_board(state, cards):
+def print_board(state, player_cards, dealer_cards):
     '''
     Prints the board. The cards var requires a list where [0] is the
     player's cards and [1] is the dealers cards. State = if the dealer
@@ -250,10 +251,8 @@ def print_board(state, cards):
     #Starts by clearing the terminal
     os.system('cls')
     
-    player_cards = cards[0]
     player_cards_value = game.calc_value(player_cards, card_value)
 
-    dealer_cards = cards[1]
     dealer_cards_value = 0
 
     dealer_up_card = dealer_cards[0]
@@ -361,12 +360,16 @@ def game_start():
     stand = False
     game_cards = game_setup()
 
+    player_cards = game_cards[0]
+    dealer_cards = game_cards[1]
+
     while True:
-        print_board(stand, game_cards)
+        print_board(stand, player_cards, dealer_cards)
 
         ans = input("Hit or stand?: ")
         if ans.lower() == "hit":
-            print("Non functional")
+            card = game.card_draw()
+            player_cards.append(card)
         elif ans.lower() == "stand":
             stand = True
         else:

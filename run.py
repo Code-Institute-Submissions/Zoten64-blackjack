@@ -44,7 +44,6 @@ deck = []
 
 
 # Functions
-# Login related functions
 
 def connect_to_DB():
     '''Connect to the MongoDB database'''
@@ -69,6 +68,7 @@ def connect_to_DB():
 
 
 class account:
+    '''Account related functions'''
     def try_again(prompt):
         '''
         The user will be asked if they want to try again
@@ -199,10 +199,9 @@ class account:
             return username
         return "unsuccessful"
 
-# Game functions
-
 
 class game:
+    '''Game related functions'''
     def generate_deck(number_of_decks):
         """
         Generates a list of all the cards. Takes the argument 'number_of_decks'
@@ -256,9 +255,24 @@ class game:
                 print("Input has to be a number.")
                 # The code will loop back to the begginning of the loop
                 continue
+    
+    def card_draw(deck):
+        '''
+        Called when a card should be drawn
+        [0] for the card, [1] for the new deck
+        '''
+        new_deck = deck
+
+        card = random.choice(new_deck)
+        new_deck.remove(card)
+
+        return card, new_deck
+
+    def game_setup(deck):
+        '''The first card draws'''
+
 
 
 # This code is temporary, but might be reused later
 
 
-game.custom_deck()

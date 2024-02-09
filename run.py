@@ -219,6 +219,11 @@ class game:
             total_value = total_value + value
         return total_value
     
+    def player_win():
+        '''Called when the player wins'''
+
+    def player_lose():
+        '''Called when the player loses'''
 
 
 # Functions
@@ -248,9 +253,9 @@ def print_board(state, player_cards, dealer_cards):
     player's cards and [1] is the dealers cards. State = if the dealer
     should reveal their hidden card, ie if the player has decided to stand
     '''
-    #Starts by clearing the terminal
+    # Starts by clearing the terminal
     os.system('cls')
-    
+
     player_cards_value = game.calc_value(player_cards, card_value)
 
     dealer_cards_value = 0
@@ -260,13 +265,13 @@ def print_board(state, player_cards, dealer_cards):
 
     # if state == True the player has decided to stand
     if (state == True):
-        #If the player has decided to stand the dealer will show both cards
-        #And the value of both cards will be calculated
-        dealer_shown_cards = [dealer_hidden_card, dealer_up_card]
+        # If the player has decided to stand the dealer will show both cards
+        # And the value of both cards will be calculated
+        dealer_shown_cards = dealer_cards
         dealer_cards_value = game.calc_value(dealer_cards, card_value)
     else:
-        #If the player has not decided to stand yet one of the
-        #Dealers cards is hidden and only the shown card's value is calculated
+        # If the player has not decided to stand yet one of the
+        # Dealers cards is hidden and only the shown card's value is calculated
         dealer_shown_cards = ["?", dealer_up_card]
         dealer_cards_value = game.calc_value([dealer_up_card], card_value)
 
@@ -334,22 +339,24 @@ def login_or_create():
         else:
             print("Invalid choice")
 
+
 def game_setup():
     '''
     Gives the player and dealers their cards
     [0] = player_cards, [1] = dealer_cards, [2] = temp_deck
     '''
     player_cards = []
-    #The player recieves their cards
+    # The player recieves their cards
     for i in range(2):
         player_cards.append(game.card_draw())
-    
-    #The dealer recieves their cards
+
+    # The dealer recieves their cards
     dealer_cards = []
     for i in range(2):
         dealer_cards.append(game.card_draw())
-    
+
     return player_cards, dealer_cards
+
 
 def game_start():
     '''
@@ -363,20 +370,40 @@ def game_start():
     player_cards = game_cards[0]
     dealer_cards = game_cards[1]
 
-    while True:
-        print_board(stand, player_cards, dealer_cards)
+    #Prints the board before the player get's to decide anything
+    print_board(stand, player_cards, dealer_cards)
+
+    # The player will be presented with a choice so long they haven't decided
+    # To stand and so long they haven't bust.
+    while stand == False:
 
         ans = input("Hit or stand?: ")
         if ans.lower() == "hit":
             card = game.card_draw()
             player_cards.append(card)
+
+            if (game.calc_value(player_cards, card_value) > highest_value):
+                stand = True
         elif ans.lower() == "stand":
             stand = True
         else:
             print("Invalid input")
+        print_board(stand, player_cards, dealer_cards)
+    
+    while True:
+        if game.calc_value(dealer_cards, card_value) < 17:
+            dealer_cards.append(game.card_draw())
+            print(dealer_cards)
+        else:
+            break
+
+    print_board(stand, player_cards, dealer_cards)
+
+    
+
 
 # This code is temporary, but might be reused later
 connect_to_DB()
-#login_or_create()
+# login_or_create()
 
 game_start()

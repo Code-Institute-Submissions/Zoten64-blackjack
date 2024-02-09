@@ -40,7 +40,6 @@ dealers_score = 0
 players_score = 0
 credits = 1000
 deck_count = 1
-deck = []
 
 
 # Functions
@@ -219,76 +218,29 @@ class game:
                 for rank in ranks:
                     temp_deck.append(rank + suit)
         return temp_deck
-
-    def custom_deck():
-        '''
-        Let's the user choose how many decks to play with
-        Many casinos use multiple decks to throw off certain strategies
-        '''
-        # The code loops until a valid value has been put in
-        # ans = the user's input. Short for answer
-        while True:
-            try:
-                print("Casinos typically use multiple decks for more"
-                      " cards to pick from. Default is 6. \n"
-                      "Type Cancel or C to cancel.")
-                ans = input("How many decks?: ")
-                # .lower() is used to make the if statement case insensitive
-                if (ans.lower() == "cancel" or ans.lower() == "c"):
-                    break
-                else:
-                    # If the player chooses a number below 1 it
-                    # loops back to the start
-                    ans = int(ans)
-                    if (int(ans) < 1):
-                        print(f"You can't play with {ans} number of decks."
-                              " Choose a number that is at least 1.")
-                        continue
-                    else:
-                        # If everything goes through the function
-                        # will return the deck
-                        return game.generate_deck(ans)
-            except Exception as e:
-                # The error will most likely be a variable type
-                # conversion error
-                print(e)
-                print("Input has to be a number.")
-                # The code will loop back to the begginning of the loop
-                continue
     
-    def card_draw(deck):
+    def card_draw():
         '''
         Called when a card should be drawn
-        [0] for the card, [1] for the new deck
         '''
-        new_deck = deck
+        card = random.choice(deck)
+        deck.remove(card)
 
-        card = random.choice(new_deck)
-        new_deck.remove(card)
+        return card
+    
+    def calc_value(cards, card_value):
+        '''Calculates the value of a set of cards'''
+        total_value = 0
+        for i in cards:
+            #Removes the last character in the card, aka the suit
+            rank = i[:-1]
+            value = card_value[rank]
+            total_value = total_value + value
+        return total_value
+    
 
-        return card, new_deck
 
-    def game_setup(deck):
-        '''
-        Gives the player and dealers their cards
-        [0] = player_cards, [1] = dealer_cards, [2] = temp_deck
-        '''
-        player_cards = []
-        temp_deck = deck
-        #The player recieves their cards
-        for i in range(2):
-            temp_cards = game.card_draw(temp_deck)
-            player_cards.append(temp_cards[0])
-            temp_deck = temp_cards[1]
-        
-        #The dealer recieves their cards
-        dealer_cards = []
-        for i in range(2):
-            temp_cards = game.card_draw(temp_deck)
-            dealer_cards.append(temp_cards[0])
-            temp_deck = temp_cards[1]
-        
-        return player_cards, dealer_cards, temp_deck
+    
 
 # Functions
         
@@ -315,16 +267,53 @@ def print_board(state, cards, deck):
     print("Players cards:", player_cards)
     print("Cards left:", len(deck))
 
+def custom_deck():
+    '''
+    Let's the user choose how many decks to play with
+    Many casinos use multiple decks to throw off certain strategies
+    '''
+    # The code loops until a valid value has been put in
+    # ans = the user's input. Short for answer
+    while True:
+        try:
+            print("Casinos typically use multiple decks for more"
+                    " cards to pick from. Default is 6. \n"
+                    "Type Cancel or C to cancel.")
+            ans = input("How many decks?: ")
+            # .lower() is used to make the if statement case insensitive
+            if (ans.lower() == "cancel" or ans.lower() == "c"):
+                break
+            else:
+                # If the player chooses a number below 1 it
+                # loops back to the start
+                ans = int(ans)
+                if (int(ans) < 1):
+                    print(f"You can't play with {ans} number of decks."
+                            " Choose a number that is at least 1.")
+                    continue
+                else:
+                    # If everything goes through the function
+                    # will return the deck
+                    return game.generate_deck(ans)
+        except Exception as e:
+            # The error will most likely be a variable type
+            # conversion error
+            print(e)
+            print("Input has to be a number.")
+            # The code will loop back to the begginning of the loop
+            continue
+
 
 
 
 # This code is temporary, but might be reused later
 
+global deck
 deck = game.generate_deck(1)
 
-stand = False
-game_cards = game.game_setup(deck)
+player_cards = []
 
-print_board(stand, game_cards, deck)
-print_board(True, game_cards, deck)
+
+player_value = game.calc_value(player_cards, card_value)
+
 

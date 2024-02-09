@@ -269,10 +269,62 @@ class game:
         return card, new_deck
 
     def game_setup(deck):
-        '''The first card draws'''
+        '''
+        Gives the player and dealers their cards
+        [0] = player_cards, [1] = dealer_cards, [2] = temp_deck
+        '''
+        player_cards = []
+        temp_deck = deck
+        #The player recieves their cards
+        for i in range(2):
+            temp_cards = game.card_draw(temp_deck)
+            player_cards.append(temp_cards[0])
+            temp_deck = temp_cards[1]
+        
+        #The dealer recieves their cards
+        dealer_cards = []
+        for i in range(2):
+            temp_cards = game.card_draw(temp_deck)
+            dealer_cards.append(temp_cards[0])
+            temp_deck = temp_cards[1]
+        
+        return player_cards, dealer_cards, temp_deck
+
+# Functions
+        
+def print_board(state, cards, deck):
+    '''
+    Prints the board. The cards var requires a list where [0] is the
+    player's cards and [1] is the dealers cards. State = if the dealer
+    should reveal their hidden card, ie if the player has decided to stand
+    '''
+
+    player_cards = cards[0]
+    dealer_cards = cards[1]
+
+    dealer_up_card = dealer_cards[0]
+    dealer_hidden_card = dealer_cards[1]
+
+    #if state = True the player has decided to stand
+    if(state == True):
+        dealer_shown_cards = [dealer_hidden_card, dealer_up_card]
+    else:
+        dealer_shown_cards = ["?", dealer_up_card]
+    
+    print("Dealers cards:", dealer_shown_cards)
+    print("Players cards:", player_cards)
+    print("Cards left:", len(deck))
+
 
 
 
 # This code is temporary, but might be reused later
 
+deck = game.generate_deck(1)
+
+stand = False
+game_cards = game.game_setup(deck)
+
+print_board(stand, game_cards, deck)
+print_board(True, game_cards, deck)
 

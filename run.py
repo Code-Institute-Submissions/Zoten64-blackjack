@@ -43,27 +43,6 @@ deck_count = 1
 global deck
 
 
-# Functions
-
-def connect_to_DB():
-    '''Connect to the MongoDB database'''
-    # Load the .env file before anything else
-    load_dotenv()
-
-    # Get database credentials and create connection to database
-    DBCREDS = os.getenv('DBCREDS') + "=true&w=majority"
-    global db_client
-    db_client = MongoClient(DBCREDS, server_api=ServerApi('1'))
-    global db
-    db = db_client["blackjack"]
-
-    # Try if the database can be accessed
-    try:
-        db_client.admin.command('ping')
-        print("Database connected")
-    except Exception as e:
-        print("Database exception:", e)
-
 # Objects/classes
 
 
@@ -220,7 +199,7 @@ class game:
                 for rank in ranks:
                     temp_deck.append(rank + suit)
         return temp_deck
-    
+
     def card_draw():
         '''
         Called when a card should be drawn
@@ -229,45 +208,77 @@ class game:
         deck.remove(card)
 
         return card
-    
+
     def calc_value(cards, card_value):
         '''Calculates the value of a set of cards'''
         total_value = 0
         for i in cards:
-            #Removes the last character in the card, aka the suit
+            # Removes the last character in the card, aka the suit
             rank = i[:-1]
             value = card_value[rank]
             total_value = total_value + value
         return total_value
-    
 
-
-    
 
 # Functions
-        
-def print_board(state, cards, deck):
+def connect_to_DB():
+    '''Connect to the MongoDB database'''
+    # Load the .env file before anything else
+    load_dotenv()
+
+    # Get database credentials and create connection to database
+    DBCREDS = os.getenv('DBCREDS') + "=true&w=majority"
+    global db_client
+    db_client = MongoClient(DBCREDS, server_api=ServerApi('1'))
+    global db
+    db = db_client["blackjack"]
+
+    # Try if the database can be accessed
+    try:
+        db_client.admin.command('ping')
+        print("Database connected")
+    except Exception as e:
+        print("Database exception:", e)
+
+
+def print_board(state, cards):
     '''
     Prints the board. The cards var requires a list where [0] is the
     player's cards and [1] is the dealers cards. State = if the dealer
     should reveal their hidden card, ie if the player has decided to stand
     '''
-
+    #Starts by clearing the terminal
+    os.system('cls')
+    
     player_cards = cards[0]
+    player_cards_value = game.calc_value(player_cards, card_value)
+
     dealer_cards = cards[1]
+    dealer_cards_value = 0
 
     dealer_up_card = dealer_cards[0]
     dealer_hidden_card = dealer_cards[1]
 
-    #if state = True the player has decided to stand
-    if(state == True):
+    # if state == True the player has decided to stand
+    if (state == True):
+        #If the player has decided to stand the dealer will show both cards
+        #And the value of both cards will be calculated
         dealer_shown_cards = [dealer_hidden_card, dealer_up_card]
+        dealer_cards_value = game.calc_value(dealer_cards, card_value)
     else:
+        #If the player has not decided to stand yet one of the
+        #Dealers cards is hidden and only the shown card's value is calculated
         dealer_shown_cards = ["?", dealer_up_card]
-    
+        dealer_cards_value = game.calc_value([dealer_up_card], card_value)
+
     print("Dealers cards:", dealer_shown_cards)
+    print("Dealers cards value:", dealer_cards_value)
+    print()
     print("Players cards:", player_cards)
+    print("Player cards value:", player_cards_value)
+    print()
     print("Cards left:", len(deck))
+
 
 def custom_deck():
     '''
@@ -279,8 +290,8 @@ def custom_deck():
     while True:
         try:
             print("Casinos typically use multiple decks for more"
-                    " cards to pick from. Default is 6. \n"
-                    "Type Cancel or C to cancel.")
+                  " cards to pick from. Default is 6. \n"
+                  "Type Cancel or C to cancel.")
             ans = input("How many decks?: ")
             # .lower() is used to make the if statement case insensitive
             if (ans.lower() == "cancel" or ans.lower() == "c"):
@@ -291,7 +302,7 @@ def custom_deck():
                 ans = int(ans)
                 if (int(ans) < 1):
                     print(f"You can't play with {ans} number of decks."
-                            " Choose a number that is at least 1.")
+                          " Choose a number that is at least 1.")
                     continue
                 else:
                     # If everything goes through the function
@@ -305,6 +316,7 @@ def custom_deck():
             # The code will loop back to the begginning of the loop
             continue
 
+
 def login_or_create():
     '''
     Asks the user if they want to create an account or log in. Loops
@@ -313,7 +325,7 @@ def login_or_create():
     while True:
         ans = input("Login or Create account?: \n"
                     "Options: \n - login \n - create \n")
-        
+
         if ans.lower() == "login":
             if account.log_in() != "unsuccessful":
                 break
@@ -323,9 +335,45 @@ def login_or_create():
         else:
             print("Invalid choice")
 
+def game_setup():
+    '''
+    Gives the player and dealers their cards
+    [0] = player_cards, [1] = dealer_cards, [2] = temp_deck
+    '''
+    player_cards = []
+    #The player recieves their cards
+    for i in range(2):
+        player_cards.append(game.card_draw())
+    
+    #The dealer recieves their cards
+    dealer_cards = []
+    for i in range(2):
+        dealer_cards.append(game.card_draw())
+    
+    return player_cards, dealer_cards
+
+def game_start():
+    '''
+    The game starts here
+    '''
+    global deck
+    deck = custom_deck()
+    stand = False
+    game_cards = game_setup()
+
+    while True:
+        print_board(stand, game_cards)
+
+        ans = input("Hit or stand?: ")
+        if ans.lower() == "hit":
+            print("Non functional")
+        elif ans.lower() == "stand":
+            stand = True
+        else:
+            print("Invalid input")
 
 # This code is temporary, but might be reused later
 connect_to_DB()
-login_or_create()
+#login_or_create()
 
-
+game_start()

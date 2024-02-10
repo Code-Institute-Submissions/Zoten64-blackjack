@@ -380,6 +380,7 @@ def game_start():
             print("Bet has to be a whole number")
 
     stand = False
+    bust = False
     game_cards = game_setup()
 
     player_cards = game_cards[0]
@@ -399,13 +400,14 @@ def game_start():
 
             if (game.calc_value(player_cards, card_value) > highest_value):
                 stand = True
+                bust = True
         elif ans.lower() == "stand":
             stand = True
         else:
             print("Invalid input")
         print_board(stand, player_cards, dealer_cards)
 
-    while True:
+    while bust == False:
         if game.calc_value(dealer_cards, card_value) < 17:
             dealer_cards.append(game.card_draw())
         else:
@@ -419,12 +421,16 @@ def game_start():
     if (dealer_value == player_value):
         print(
             f"Draw. Your bet has been returned.\n Current balance: {balance}")
+    elif(dealer_value > player_value):
+        balance = balance - bet
+        print(f"You lost. \nCurrent balance: {balance}")
+    elif(bust):
+        balance = balance - bet
+        print(f"You bust. \nCurrent balance: {balance}")
     elif (dealer_value < player_value or dealer_value > highest_value):
         balance = balance + bet
         print(f"You won! \nCurrent balance: {balance}")
-    else:
-        balance = balance - bet
-        print(f"You lost. \nCurrent balance: {balance}")
+    
 
     
 

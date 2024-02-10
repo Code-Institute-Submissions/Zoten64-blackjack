@@ -38,7 +38,7 @@ card_value = default_card_value
 highest_value = 21
 dealers_score = 0
 players_score = 0
-credits = 1000
+balance = 1000
 deck_count = 1
 global deck
 
@@ -345,6 +345,7 @@ def game_setup():
     Gives the player and dealers their cards
     [0] = player_cards, [1] = dealer_cards, [2] = temp_deck
     '''
+
     player_cards = []
     # The player recieves their cards
     for i in range(2):
@@ -362,6 +363,7 @@ def game_start():
     '''
     The game starts here
     '''
+    global balance
     global deck
     deck = custom_deck()
 
@@ -369,7 +371,7 @@ def game_start():
     # To a failed conversion from string to integer, most likely due to
     # the input not being a number or containing decimals
     while True:
-        bet = input(f"You have {credits} amount of credits left. \n"
+        bet = input(f"You have {balance} amount of credits left. \n"
                     "how much will you bet? \n")
         try:
             bet = int(bet)
@@ -406,15 +408,29 @@ def game_start():
     while True:
         if game.calc_value(dealer_cards, card_value) < 17:
             dealer_cards.append(game.card_draw())
-            print(dealer_cards)
         else:
             break
 
     print_board(stand, player_cards, dealer_cards)
 
+    dealer_value = game.calc_value(dealer_cards, card_value)
+    player_value = game.calc_value(player_cards, card_value)
+
+    if (dealer_value == player_value):
+        print(
+            f"Draw. Your bet has been returned.\n Current balance: {balance}")
+    elif (dealer_value < player_value or dealer_value > highest_value):
+        balance = balance + bet
+        print(f"You won! \nCurrent balance: {balance}")
+    else:
+        balance = balance - bet
+        print(f"You lost. \nCurrent balance: {balance}")
+
+    
+
 
 # This code is temporary, but might be reused later
-connect_to_DB()
+# connect_to_DB()
 # login_or_create()
 
 game_start()

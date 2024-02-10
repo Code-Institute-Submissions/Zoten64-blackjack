@@ -33,6 +33,8 @@
 | Script always outputs that the number of decks needs to be a number despite a number being put in | The conversion to int was not proper. int(ans > 0) instead of int(ans) > 0 making it try and compare a string and an integer before converting to an integer|
 | String does not convert to int | Convert the string before the if statement |
 | "c" for cancel does not work | Missing () after .lower |
+| "cannot access local variable 'balance' where it is not associated with a value" error on a global variable| Declare the variable as global inside function |
+| Player wins when the dealer should | accidentally used ">" instead of "<" |
 
 ## Technologies and tools
 **Languages**

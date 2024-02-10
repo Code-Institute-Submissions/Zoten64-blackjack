@@ -218,7 +218,7 @@ class game:
             value = card_value[rank]
             total_value = total_value + value
         return total_value
-    
+
     def player_win():
         '''Called when the player wins'''
 
@@ -295,11 +295,11 @@ def custom_deck():
         try:
             print("Casinos typically use multiple decks for more"
                   " cards to pick from. Default is 6. \n"
-                  "Type Cancel or C to cancel.")
+                  "Type Cancel or C to cancel. This will select the default")
             ans = input("How many decks?: ")
             # .lower() is used to make the if statement case insensitive
             if (ans.lower() == "cancel" or ans.lower() == "c"):
-                break
+                return game.generate_deck(6)
             else:
                 # If the player chooses a number below 1 it
                 # loops back to the start
@@ -364,13 +364,26 @@ def game_start():
     '''
     global deck
     deck = custom_deck()
+
+    # validating the input. If an error occurs it is most likely due
+    # To a failed conversion from string to integer, most likely due to
+    # the input not being a number or containing decimals
+    while True:
+        bet = input(f"You have {credits} amount of credits left. \n"
+                    "how much will you bet? \n")
+        try:
+            bet = int(bet)
+            break
+        except:
+            print("Bet has to be a whole number")
+
     stand = False
     game_cards = game_setup()
 
     player_cards = game_cards[0]
     dealer_cards = game_cards[1]
 
-    #Prints the board before the player get's to decide anything
+    # Prints the board before the player get's to decide anything
     print_board(stand, player_cards, dealer_cards)
 
     # The player will be presented with a choice so long they haven't decided
@@ -389,7 +402,7 @@ def game_start():
         else:
             print("Invalid input")
         print_board(stand, player_cards, dealer_cards)
-    
+
     while True:
         if game.calc_value(dealer_cards, card_value) < 17:
             dealer_cards.append(game.card_draw())
@@ -398,8 +411,6 @@ def game_start():
             break
 
     print_board(stand, player_cards, dealer_cards)
-
-    
 
 
 # This code is temporary, but might be reused later

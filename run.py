@@ -368,74 +368,79 @@ def game_start():
     global deck
     deck = custom_deck()
 
-    # validating the input. If an error occurs it is most likely due
-    # To a failed conversion from string to integer, most likely due to
-    # the input not being a number or containing decimals
     while True:
-        bet = input(f"You have {balance} amount of credits left. \n"
-                    "how much will you bet? \n")
-        try:
-            bet = int(bet)
-            break
-        except:
-            print("Bet has to be a whole number")
+        # validating the input. If an error occurs it is most likely due
+        # To a failed conversion from string to integer, most likely due to
+        # the input not being a number or containing decimals
+        while True:
+            bet = input(f"You have {balance} amount of credits left. \n"
+                        "how much will you bet? \n")
+            try:
+                bet = int(bet)
+                break
+            except:
+                print("Bet has to be a whole number")
 
-    stand = False
-    bust = False
-    game_cards = game_setup()
+        stand = False
+        bust = False
+        game_cards = game_setup()
 
-    player_cards = game_cards[0]
-    dealer_cards = game_cards[1]
+        player_cards = game_cards[0]
+        dealer_cards = game_cards[1]
 
-    # Prints the board before the player get's to decide anything
-    print_board(stand, player_cards, dealer_cards)
-
-    if game.calc_value(player_cards, card_value) == highest_value:
-        balance = balance + round(bet / 2)
-        print("Blackjack! You won 1.5x your bet back. \n"
-              f"Current Balance: {balance}")
-
-    # The player will be presented with a choice so long they haven't decided
-    # To stand and so long they haven't bust.
-    while stand == False:
-
-        ans = input("Hit or stand?: ")
-        if ans.lower() == "hit":
-            card = game.card_draw()
-            player_cards.append(card)
-
-            if (game.calc_value(player_cards, card_value) > highest_value):
-                stand = True
-                bust = True
-        elif ans.lower() == "stand":
-            stand = True
-        else:
-            print("Invalid input")
+        # Prints the board before the player get's to decide anything
         print_board(stand, player_cards, dealer_cards)
 
-    while bust == False:
-        if game.calc_value(dealer_cards, card_value) < 17:
-            dealer_cards.append(game.card_draw())
-        else:
-            break
+        if game.calc_value(player_cards, card_value) == highest_value:
+            balance = balance + round(bet / 2)
+            stand = True
+            print("Blackjack! You won 1.5x your bet back. \n"
+                f"Current Balance: {balance}")
 
-    print_board(stand, player_cards, dealer_cards)
+        # The player will be presented with a choice so long they haven't decided
+        # To stand and so long they haven't bust.
+        while stand == False:
 
-    dealer_value = game.calc_value(dealer_cards, card_value)
-    player_value = game.calc_value(player_cards, card_value)
+            ans = input("Hit or stand?: ")
+            if ans.lower() == "hit":
+                card = game.card_draw()
+                player_cards.append(card)
 
-    if (dealer_value == player_value):
-        print(
-            f"Draw. Your bet has been returned.\n Current balance: {balance}")
-    elif (dealer_value > player_value):
-        balance = balance - bet
-        print(f"You lost. \nCurrent balance: {balance}")
-    elif (bust):
-        balance = balance - bet
-        print(f"You bust. \nCurrent balance: {balance}")
-    elif (dealer_value < player_value or dealer_value > highest_value):
-        balance = balance + bet
-        print(f"You won! \nCurrent balance: {balance}")
+                if (game.calc_value(player_cards, card_value) > highest_value):
+                    stand = True
+                    bust = True
+            elif ans.lower() == "stand":
+                stand = True
+            else:
+                print("Invalid input")
+            print_board(stand, player_cards, dealer_cards)
+
+        while bust == False:
+            if game.calc_value(dealer_cards, card_value) < 17:
+                dealer_cards.append(game.card_draw())
+            else:
+                break
+
+        print_board(stand, player_cards, dealer_cards)
+
+        dealer_value = game.calc_value(dealer_cards, card_value)
+        player_value = game.calc_value(player_cards, card_value)
+
+        if (dealer_value == player_value):
+            print(
+                f"Draw. Your bet has been returned.\n Current balance: {balance}")
+        elif (dealer_value > player_value):
+            balance = balance - bet
+            print(f"You lost. \nCurrent balance: {balance}")
+        elif (bust):
+            balance = balance - bet
+            print(f"You bust. \nCurrent balance: {balance}")
+        elif (dealer_value < player_value or dealer_value > highest_value):
+            balance = balance + bet
+            print(f"You won! \nCurrent balance: {balance}")
+        
+        input("Press enter to continue..")
+        os.system("cls")
 
 
 # This code is temporary, but might be reused later

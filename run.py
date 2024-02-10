@@ -216,15 +216,15 @@ class game:
         for i in cards:
             # Removes the last character in the card, aka the suit
             rank = i[:-1]
-            if(rank == "A"):
+            if (rank == "A"):
                 includes_ace = True
             value = card_value[rank]
             total_value = total_value + value
 
-        #If the value exceeds 21 and the cards include an ace, the ace
+        # If the value exceeds 21 and the cards include an ace, the ace
         # will count as a 1 instead of 11. This is done by removing
         # 10 from the total value
-        if(total_value > highest_value and includes_ace):
+        if (total_value > highest_value and includes_ace):
             total_value = total_value - 10
 
         return total_value
@@ -345,10 +345,7 @@ def login_or_create():
 
 
 def game_setup():
-    '''
-    Gives the player and dealers their cards
-    [0] = player_cards, [1] = dealer_cards, [2] = temp_deck
-    '''
+    '''Gives the player and dealers their cards'''
 
     player_cards = []
     # The player recieves their cards
@@ -392,6 +389,11 @@ def game_start():
 
     # Prints the board before the player get's to decide anything
     print_board(stand, player_cards, dealer_cards)
+
+    if game.calc_value(player_cards, card_value) == highest_value:
+        balance = balance + round(bet / 2)
+        print("Blackjack! You won 1.5x your bet back. \n"
+              f"Current Balance: {balance}")
 
     # The player will be presented with a choice so long they haven't decided
     # To stand and so long they haven't bust.

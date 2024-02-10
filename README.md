@@ -35,6 +35,7 @@
 | "c" for cancel does not work | Missing () after .lower |
 | "cannot access local variable 'balance' where it is not associated with a value" error on a global variable| Declare the variable as global inside function |
 | Player wins when the dealer should | accidentally used ">" instead of "<" |
+| Player/dealer still bust even if value does not exceed 21 when cards include an Ace due to an Ace counting as 1 when the total value exceeds 21 when the Ace is worth 11 | Change the way the value is calculated by removing 10 when the total value exceeds 21 and there is an ace in the deck | 
 
 ## Technologies and tools
 **Languages**

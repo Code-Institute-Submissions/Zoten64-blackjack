@@ -211,19 +211,23 @@ class game:
 
     def calc_value(cards, card_value):
         '''Calculates the value of a set of cards'''
+        includes_ace = False
         total_value = 0
         for i in cards:
             # Removes the last character in the card, aka the suit
             rank = i[:-1]
+            if(rank == "A"):
+                includes_ace = True
             value = card_value[rank]
             total_value = total_value + value
+
+        #If the value exceeds 21 and the cards include an ace, the ace
+        # will count as a 1 instead of 11. This is done by removing
+        # 10 from the total value
+        if(total_value > highest_value and includes_ace):
+            total_value = total_value - 10
+
         return total_value
-
-    def player_win():
-        '''Called when the player wins'''
-
-    def player_lose():
-        '''Called when the player loses'''
 
 
 # Functions
@@ -421,22 +425,18 @@ def game_start():
     if (dealer_value == player_value):
         print(
             f"Draw. Your bet has been returned.\n Current balance: {balance}")
-    elif(dealer_value > player_value):
+    elif (dealer_value > player_value):
         balance = balance - bet
         print(f"You lost. \nCurrent balance: {balance}")
-    elif(bust):
+    elif (bust):
         balance = balance - bet
         print(f"You bust. \nCurrent balance: {balance}")
     elif (dealer_value < player_value or dealer_value > highest_value):
         balance = balance + bet
         print(f"You won! \nCurrent balance: {balance}")
-    
-
-    
 
 
 # This code is temporary, but might be reused later
 # connect_to_DB()
 # login_or_create()
-
 game_start()

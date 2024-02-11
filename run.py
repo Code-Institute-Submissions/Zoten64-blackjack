@@ -76,7 +76,9 @@ class account:
             return
         else:
             # The data is made into a dictionary and put into the db
-            data = {"username": username, "password": password}
+            data = {"username": username,
+                    "password": password,
+                    "balance": balance}
             db["player"].insert_one(data)
             return "success"
 
@@ -229,6 +231,12 @@ class game:
 
         return total_value
 
+    def save_game(credits, username):
+        '''Saves the amount of credits the user has'''
+
+    def get_saved_game(username):
+        '''Gets any save info the player has'''
+
 
 # Functions
 def connect_to_DB():
@@ -360,6 +368,20 @@ def game_setup():
     return player_cards, dealer_cards
 
 
+def card_check(timeframe):
+    '''
+    Checks if there's enough cards to continue playing
+    timeframe = at which point in the game the function is called
+    '''
+    global deck
+    # Cards cannot be dealt at the start if theres less than 4 cards left
+    if (len(deck) < 4 and timeframe == "start"):
+        print("Out of cards. Restocking deck.")
+        deck = custom_deck()
+    elif (len(deck) <= 0):
+        deck = custom_deck()
+
+
 def game_start():
     '''
     The game starts here
@@ -372,17 +394,31 @@ def game_start():
         # validating the input. If an error occurs it is most likely due
         # To a failed conversion from string to integer, most likely due to
         # the input not being a number or containing decimals
+
+        if (balance <= 0):
+            print("Out of credits. Balance has been set to 100 to give you "
+                  "another chance.")
+            balance = 100
+
         while True:
             bet = input(f"You have {balance} amount of credits left. \n"
                         "how much will you bet? \n")
+
             try:
                 bet = int(bet)
-                break
+                if (bet > balance):
+                    print("You can't bet more than you have.")
+                else:
+                    break
             except:
                 print("Bet has to be a whole number")
+            
+        os.system("clear")
 
         stand = False
         bust = False
+
+        card_check("start")
         game_cards = game_setup()
 
         player_cards = game_cards[0]
@@ -395,11 +431,12 @@ def game_start():
             balance = balance + round(bet / 2)
             stand = True
             print("Blackjack! You won 1.5x your bet back. \n"
-                f"Current Balance: {balance}")
+                  f"Current Balance: {balance}")
 
         # The player will be presented with a choice so long they haven't decided
         # To stand and so long they haven't bust.
         while stand == False:
+            card_check("midpoint")
 
             ans = input("Hit or stand?: ")
             if ans.lower() == "hit":
@@ -428,7 +465,8 @@ def game_start():
 
         if (dealer_value == player_value):
             print(
-                f"Draw. Your bet has been returned.\n Current balance: {balance}")
+                f"Draw. Your bet has been returned.\n"
+                "Current balance: {balance}")
         elif (dealer_value > player_value):
             balance = balance - bet
             print(f"You lost. \nCurrent balance: {balance}")
@@ -438,12 +476,12 @@ def game_start():
         elif (dealer_value < player_value or dealer_value > highest_value):
             balance = balance + bet
             print(f"You won! \nCurrent balance: {balance}")
-        
+
         input("Press enter to continue..")
         os.system("clear")
 
 
 # This code is temporary, but might be reused later
-# connect_to_DB()
-# login_or_create()
+#connect_to_DB()
+#login_or_create()
 game_start()

@@ -440,7 +440,7 @@ def game_start():
             print(f"You won! \nCurrent balance: {balance}")
         
         input("Press enter to continue..")
-        os.system("cls")
+        os.system("clear")
 
 
 # This code is temporary, but might be reused later

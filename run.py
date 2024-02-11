@@ -266,7 +266,7 @@ def print_board(state, player_cards, dealer_cards):
     should reveal their hidden card, ie if the player has decided to stand
     '''
     # Starts by clearing the terminal
-    os.system('cls')
+    os.system('clear')
 
     player_cards_value = game.calc_value(player_cards, card_value)
 

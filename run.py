@@ -93,7 +93,7 @@ class account:
             username = input("username: ")
             if account.username_exists(username):
                 if (account.try_again("Username is taken. Try again? Y/N: ")
-                        == False):
+                        is False):
                     return "interrupted"
             else:
                 return username
@@ -112,7 +112,7 @@ class account:
                 return account.hash_password(password)
             else:
                 if (account.try_again("Passwords do not match. "
-                                      "Try again? Y/N: ") == False):
+                                      "Try again? Y/N: ") is False):
                     return "interrupted"
 
     # Both hash and check password functions reference this tutorial:
@@ -155,11 +155,11 @@ class account:
         while True:
             username = input("Username: ")
             # If the username does not exist this will run
-            if account.username_exists(username) == False:
+            if account.username_exists(username) is False:
                 # If the username is invalid the user will be prompted
                 # to try again or cancel
                 if (account.try_again("invalid username. Try again? Y/N: ")
-                        == False):
+                        is False):
                     break
                 else:
                     # Makes it loop back to the start
@@ -173,7 +173,7 @@ class account:
                     break
                 else:
                     if (account.try_again("invalid password. Try again? Y/N: ")
-                            == False):
+                            is False):
                         break
                     else:
                         # Makes it loop back to the start
@@ -235,16 +235,14 @@ class game:
 
     def save_game(username):
         '''Saves the amount of credits the user has'''
-        db["player"].update_one({"username" : username}, 
-                                {"$set": {"balance" : balance}})
-
+        db["player"].update_one({"username": username},
+                                {"$set": {"balance": balance}})
 
     def get_saved_game(username):
         '''Gets any save info the player has'''
         global balance
-        balance = db["player"].find_one({"username" : username})
+        balance = db["player"].find_one({"username": username})
         balance = balance["balance"]
-
 
 
 # Functions
@@ -270,7 +268,7 @@ def connect_to_DB():
 
 def print_board(state, player_cards, dealer_cards):
     '''
-    Prints the board. State = if the dealer should reveal their hidden card, 
+    Prints the board. State = if the dealer should reveal their hidden card,
     ie if the player has decided to stand
     '''
     # Starts by clearing the terminal
@@ -283,7 +281,7 @@ def print_board(state, player_cards, dealer_cards):
     dealer_up_card = dealer_cards[0]
 
     # if state == True the player has decided to stand
-    if (state == True):
+    if (state is True):
         # If the player has decided to stand the dealer will show both cards
         # And the value of both cards will be calculated
         dealer_shown_cards = dealer_cards
@@ -356,7 +354,7 @@ def login_or_create():
             if username != "unsuccessful":
                 break
         elif ans.lower() == "create":
-            username = account.create_account() 
+            username = account.create_account()
             if username != "unsuccessful":
                 break
         else:
@@ -421,9 +419,9 @@ def game_start():
                     print("You can't bet more than you have.")
                 else:
                     break
-            except:
+            except ValueError:
                 print("Bet has to be a whole number")
-            
+
         os.system("clear")
 
         stand = False
@@ -444,9 +442,9 @@ def game_start():
             print("Blackjack! You won 1.5x your bet back. \n"
                   f"Current Balance: {balance}")
 
-        # The player will be presented with a choice so long they haven't decided
-        # To stand and so long they haven't bust.
-        while stand == False:
+        # The player will be presented with a choice so long they haven't
+        # decided To stand and so long they haven't bust.
+        while stand is False:
             card_check("midpoint")
 
             ans = input("Hit or stand?: ")
@@ -463,7 +461,7 @@ def game_start():
                 print("Invalid input")
             print_board(stand, player_cards, dealer_cards)
 
-        while bust == False:
+        while bust is False:
             if game.calc_value(dealer_cards, card_value) < 17:
                 dealer_cards.append(game.card_draw())
             else:

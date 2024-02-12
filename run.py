@@ -179,6 +179,7 @@ class account:
                         # Makes it loop back to the start
                         continue
             # If everything goes through the function returns the username
+            game.get_saved_game(username)
             return username
         return "unsuccessful"
 
@@ -240,6 +241,10 @@ class game:
 
     def get_saved_game(username):
         '''Gets any save info the player has'''
+        global balance
+        balance = db["player"].find_one({"username" : username})
+        balance = balance["balance"]
+
 
 
 # Functions

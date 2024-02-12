@@ -47,6 +47,7 @@
 - Visual Studio Code
 - Pip
 - MongoDB
+- [ASCII Art generator](https://patorjk.com/software/taag/)
 
 **Python Libraries**
 - Random

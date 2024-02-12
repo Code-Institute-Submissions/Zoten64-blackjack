@@ -445,6 +445,17 @@ def card_check(timeframe):
     elif (len(deck) < 1):
         deck = custom_deck()
 
+def intro():
+    '''The intro to the game'''
+    #The ASCII art itself is stored in a txt file
+    intro_text = open("./intro.txt", "r")
+    print(intro_text.read())
+    print()
+    input("Press enter to continue")
+
+
+def tutorial():
+    '''If the player doesn't know how to play this will be run'''
 
 def game_start():
     '''
@@ -585,6 +596,7 @@ def game_start():
 
 
 # Main
+intro()
 connect_to_DB()
 login_or_create()
 game_start()

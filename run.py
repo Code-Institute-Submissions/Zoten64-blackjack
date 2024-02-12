@@ -1,3 +1,6 @@
+# To do:
+# - Separate game_start() into different functions for better readability
+
 # Import statements
 import random
 import os
@@ -19,7 +22,7 @@ ranks = ['A', '2', '3', '4', '5',
          '6', '7', '8', '9', '10',
          'J', 'Q', 'K']
 # A dictonary determining the value of each card rank.
-default_card_value = {
+card_value = {
     "A": 11,
     "2": 2,
     "3": 3,
@@ -34,7 +37,6 @@ default_card_value = {
     "Q": 10,
     "K": 10
 }
-card_value = default_card_value
 highest_value = 21
 dealers_score = 0
 players_score = 0
@@ -55,6 +57,8 @@ class account:
         The prompt variable will be printed making this code reuseable
         '''
 
+        # The answer is immediately converted into lowercase to ensure
+        # Case insensitivity
         ans = input(prompt).lower()
         if (ans == "y"):
             return True
@@ -64,10 +68,15 @@ class account:
             print("Invalid option.")
 
     def create_account():
-        '''Create an account and put it into the database'''
+        '''
+        Create an account and put it into the database
+        Returns "Unsuccessful" if the user cancels
+        '''
         # Username or Password will equal "interrupted" if the user cancels
-        # either of the retries when an input is invalid
-        # In this case return makes the function stop running
+        # during one of the other called functions
+        # If either of the functions called inside here returns "interrupted"
+        # the function will return "unsuccessful"
+        # Otherwise it returns the username
         username = account.create_username()
         if (username == "interrupted"):
             return "unsuccessful"
@@ -84,8 +93,10 @@ class account:
             return username
 
     def create_username():
-        '''Lets user create a username'''
-
+        '''
+        Lets user create a username
+        Returns "interrupted" if the user cancels
+        '''
         # Repeats until an available username is found or the user cancels
         # If an available username is found it returns it
         # If the user cancels the function will return "interrupted"
@@ -99,7 +110,10 @@ class account:
                 return username
 
     def create_password():
-        '''Lets user create a password'''
+        '''
+        Lets user create a password.
+        Returns "interrupted" if the user cancels.
+        '''
         # This will loop until the passwords matches or the user cancels
         # Pwinput is used here to make the password hidden when the
         # user is typing it
@@ -108,6 +122,9 @@ class account:
             password_confirm = pwinput.pwinput(prompt="Confirm password: ",
                                                mask="*")
 
+            # If the passwords match the hash function will be called
+            # and the result will be returned.
+            # Otherwise it will ask the user if they want to try again
             if (password == password_confirm):
                 return account.hash_password(password)
             else:
@@ -119,52 +136,69 @@ class account:
     # https://www.geeksforgeeks.org/hashing-passwords-in-python-with-bcrypt/
 
     def hash_password(password):
-        '''Hashes the password'''
+        '''Hashes the password, aka encrypts it'''
         # Converts the password to bytes
         bytes = password.encode("utf-8")
         # Generates salt for a more secure encryption
         salt = bcrypt.gensalt()
         # Finally hashes the password
         hash = bcrypt.hashpw(bytes, salt)
-
         return hash
 
     def username_exists(username):
-        '''Checks if a username exists'''
+        '''
+        Checks if a username exists.
+        Returns True if the username exists.
+        '''
         # Counts the amount of documents containing the username.
         # If the amount is not 0 the username is taken
+        # Returns False if the username does not exist, and True if it does.
         if (db["player"].count_documents({"username": username})) == 0:
             return False
         else:
             return True
 
     def check_password(password, username):
-        '''Checks if the password is correct'''
+        '''
+        Checks if the password used to log in is correct.
+        Returns True if the password is correct
+        '''
         # Converts the password into bytes
         bytes = password.encode("utf-8")
         hash = db["player"].find_one({"username": username},
                                      {"password": True})["password"]
-        # Checks if the password matches
-        if (bcrypt.checkpw(bytes, hash)):
-            return True
-        else:
-            return False
+
+        # Checks if the password matches with that in the database
+        # and returns the result.
+        # Returns True if it's correct, False is it isn't
+        return bcrypt.checkpw(bytes, hash)
 
     def log_in():
-        '''Prompts the user for login information'''
+        '''
+        Prompts the user for login information
+        Returns "Unsuccessful" if the user cancels
+        '''
+        # The loop will make sure that the player enters a valid answer
+        # In this case if the input is valid it enters the next loop
+        # If the input is not valid it asks the user if they want to
+        # Try again. If not it will break out of the loop, cancelling the
+        # Whole operation.
+        # If the user tries again it will loop back to the start
         while True:
             username = input("Username: ")
-            # If the username does not exist this will run
+            # Check if there is a user with that name
             if account.username_exists(username) is False:
                 # If the username is invalid the user will be prompted
                 # to try again or cancel
                 if (account.try_again("invalid username. Try again? Y/N: ")
                         is False):
+                    # if the user doesn't want to try again the loop
+                    # is broken out of
                     break
                 else:
                     # Makes it loop back to the start
                     continue
-
+            # Same loop concept as above, just with the password instead
             while True:
                 password = pwinput.pwinput(prompt="Password: ", mask="*")
                 account.check_password(password, username)
@@ -174,13 +208,17 @@ class account:
                 else:
                     if (account.try_again("invalid password. Try again? Y/N: ")
                             is False):
+                        # if the user doesn't want to try again the loop
+                        # is broken out of
                         break
                     else:
                         # Makes it loop back to the start
                         continue
-            # If everything goes through the function returns the username
+            # If everything goes through the saved game is retrieved
+            # From the database. Lastly the function returns the username
             game.get_saved_game(username)
             return username
+        # If the user cancels the function returns "unsuccessful"
         return "unsuccessful"
 
 
@@ -194,6 +232,7 @@ class game:
         # Code referenced from here:
         # https://www.geeksforgeeks.org/how-to-print-a-deck-of-cards-in-python/
         # Code has been changed slightly to fit this function
+
         # A temporary deck is created in order to not risk overwriting any
         # existing deck variable. This will be returned
         # at the end of the function.
@@ -206,20 +245,25 @@ class game:
 
     def card_draw():
         '''
-        Called when a card should be drawn
+        Called when a random card should be drawn.
+        Returns the card.
         '''
+
         card = random.choice(deck)
+        # Removes the card from the deck
         deck.remove(card)
 
         return card
 
     def calc_value(cards, card_value):
         '''Calculates the value of a set of cards'''
+
         includes_ace = False
         total_value = 0
         for i in cards:
             # Removes the last character in the card, aka the suit
             rank = i[:-1]
+            # If an Ace is found it turns the includes_ace var to True
             if (rank == "A"):
                 includes_ace = True
             value = card_value[rank]
@@ -240,7 +284,10 @@ class game:
 
     def get_saved_game(username):
         '''Gets any save info the player has'''
+        # Tells the game to use the global variable "balance"
         global balance
+        # First get's a dict of the information in the database entry
+        # Then it picks the value with the key "balance"
         balance = db["player"].find_one({"username": username})
         balance = balance["balance"]
 
@@ -253,35 +300,34 @@ def connect_to_DB():
 
     # Get database credentials and create connection to database
     DBCREDS = os.getenv('DBCREDS') + "=true&w=majority"
+    # Makes the variables global for future use
     global db_client
     db_client = MongoClient(DBCREDS, server_api=ServerApi('1'))
     global db
     db = db_client["blackjack"]
 
-    # Try if the database can be accessed
+    # Try if the database can be accessed.
+    # Otherwise print the error to the console.
     try:
         db_client.admin.command('ping')
-        print("Database connected")
     except Exception as e:
         print("Database exception:", e)
 
 
-def print_board(state, player_cards, dealer_cards):
+def print_board(stand, player_cards, dealer_cards):
     '''
-    Prints the board. State = if the dealer should reveal their hidden card,
-    ie if the player has decided to stand
+    Prints the board. Stand = if the dealer should reveal their hidden card,
+    ie if the player has decided to stand or has bust
     '''
     # Starts by clearing the terminal
     os.system('clear')
 
     player_cards_value = game.calc_value(player_cards, card_value)
-
-    dealer_cards_value = 0
-
     dealer_up_card = dealer_cards[0]
 
-    # if state == True the player has decided to stand
-    if (state is True):
+    # If the player has decided to stand or has bust the dealers
+    # down card will be revealed
+    if (stand is True):
         # If the player has decided to stand the dealer will show both cards
         # And the value of both cards will be calculated
         dealer_shown_cards = dealer_cards
@@ -292,6 +338,7 @@ def print_board(state, player_cards, dealer_cards):
         dealer_shown_cards = ["?", dealer_up_card]
         dealer_cards_value = game.calc_value([dealer_up_card], card_value)
 
+    # Prints the values to the console
     print("Dealers cards:", dealer_shown_cards)
     print("Dealers cards value:", dealer_cards_value)
     print()
@@ -326,13 +373,11 @@ def custom_deck():
                           " Choose a number that is at least 1.")
                     continue
                 else:
-                    # If everything goes through the function
-                    # will return the deck
+                    # If everything goes through the function returns the deck
                     return game.generate_deck(ans)
-        except Exception as e:
+        except ValueError:
             # The error will most likely be a variable type
             # conversion error
-            print(e)
             print("Input has to be a number.")
             # The code will loop back to the begginning of the loop
             continue
@@ -340,20 +385,25 @@ def custom_deck():
 
 def login_or_create():
     '''
-    Asks the user if they want to create an account or log in. Loops
-    until a valid answer has been given
+    Prompts the user to either log in or create an account.
+    Loops until the user has logged in or created an account
     '''
     while True:
+        # Tells the function to use the global variable "username"
         global username
-
+        # ans = the users answer
         ans = input("Login or Create account?: \n"
-                    "Options: \n - login \n - create \n")
+                    "Options: \n - login \n - create \n").lower()
 
-        if ans.lower() == "login":
+        # If either the username or password does not equal "unsuccessful"
+        # the user has logged in/created an account and the loop breaks
+        # Otherwise it loops back to the start, asking the user if they want
+        # To log in or create an account
+        if ans == "login":
             username = account.log_in()
             if username != "unsuccessful":
                 break
-        elif ans.lower() == "create":
+        elif ans == "create":
             username = account.create_account()
             if username != "unsuccessful":
                 break
@@ -363,14 +413,15 @@ def login_or_create():
 
 def game_setup():
     '''Gives the player and dealers their cards'''
-
+    # Empty lists to append to
     player_cards = []
+    dealer_cards = []
+
     # The player recieves their cards
     for i in range(2):
         player_cards.append(game.card_draw())
 
     # The dealer recieves their cards
-    dealer_cards = []
     for i in range(2):
         dealer_cards.append(game.card_draw())
 
@@ -382,12 +433,16 @@ def card_check(timeframe):
     Checks if there's enough cards to continue playing
     timeframe = at which point in the game the function is called
     '''
+    # Tells the function to use the global variable "deck"
     global deck
     # Cards cannot be dealt at the start if theres less than 4 cards left
+    # In any other timeframe of the game there only needs to be one card left
+    # If the deck does not have enough cards the user will be prompted to
+    # enter a number of decks again
     if (len(deck) < 4 and timeframe == "start"):
         print("Out of cards. Restocking deck.")
         deck = custom_deck()
-    elif (len(deck) <= 0):
+    elif (len(deck) < 1):
         deck = custom_deck()
 
 
@@ -395,14 +450,16 @@ def game_start():
     '''
     The game starts here
     '''
+    # Start by clearing the console
+    os.system("clear")
+    # Tells the function to use the global variable "deck"
     global balance
     global deck
+
+    # Ask the user for how many decks they want to play with
     deck = custom_deck()
 
     while True:
-        # validating the input. If an error occurs it is most likely due
-        # To a failed conversion from string to integer, most likely due to
-        # the input not being a number or containing decimals
 
         if (balance <= 0):
             print("Out of credits. Balance has been set to 100 to give you "
@@ -413,8 +470,12 @@ def game_start():
             bet = input(f"You have {balance} amount of credits left. \n"
                         "how much will you bet? \n")
 
+            # Validates the input. If an error occurs it is most likely due
+            # to a failed conversion from string to integer, most likely due to
+            # the input not being a number or containing decimals
             try:
                 bet = int(bet)
+                # Makes sure the player can't bet more than they have
                 if (bet > balance):
                     print("You can't bet more than you have.")
                 else:
@@ -422,56 +483,87 @@ def game_start():
             except ValueError:
                 print("Bet has to be a whole number")
 
+        # Clear the console before the actual game starts
         os.system("clear")
 
         stand = False
         bust = False
 
+        # Checks if the deck has more than 4 cards at the start
         card_check("start")
         game_cards = game_setup()
 
+        # game_cards returns two lists. Separates these into two vars
         player_cards = game_cards[0]
         dealer_cards = game_cards[1]
 
         # Prints the board before the player get's to decide anything
         print_board(stand, player_cards, dealer_cards)
 
+        # Starts by checking if the two first cards equals 21. This is
+        # called a blackjack and it gives you 1.5x your bet back.
+        # Since the script does not remove from the balance until a
+        # win/loss has been achieved it gives back half of the entered value
+        # In a real casino you would typically be given back the chip you
+        # handed over plus your winnings
         if game.calc_value(player_cards, card_value) == highest_value:
+            # Rounds the number to prevent decimals
             balance = balance + round(bet / 2)
             stand = True
             print("Blackjack! You won 1.5x your bet back. \n"
                   f"Current Balance: {balance}")
 
         # The player will be presented with a choice so long they haven't
-        # decided To stand and so long they haven't bust.
+        # decided to stand and so long they haven't bust.
         while stand is False:
+            # "midpoint" doesn't actually do anything. It's put in as
+            # an argument is mandatory
             card_check("midpoint")
 
-            ans = input("Hit or stand?: ")
-            if ans.lower() == "hit":
+            # ans is short for answer. .lower() is used to make the
+            # variable lowercase, essentially making the answer case
+            # insensitive
+            ans = input("Hit or stand?: ").lower()
+            if ans == "hit":
+                # If the player hits a card will be drawn and
+                # added to the players hand
                 card = game.card_draw()
                 player_cards.append(card)
 
+                # If the player hits and their hand exceeds 21 they will
+                # automatically lose
                 if (game.calc_value(player_cards, card_value) > highest_value):
                     stand = True
                     bust = True
-            elif ans.lower() == "stand":
+            elif ans == "stand":
                 stand = True
             else:
                 print("Invalid input")
+
+            # The board is updated
             print_board(stand, player_cards, dealer_cards)
 
+        # If the player hasn't bust and the dealer has a value below
+        # 17, the dealer has to pick up cards until it reaches at least 17
         while bust is False:
             if game.calc_value(dealer_cards, card_value) < 17:
                 dealer_cards.append(game.card_draw())
             else:
                 break
 
+        # Update the board again
         print_board(stand, player_cards, dealer_cards)
 
+        # After a terminal state has been reached the player and dealer
+        # value will be calculated and compared
         dealer_value = game.calc_value(dealer_cards, card_value)
         player_value = game.calc_value(player_cards, card_value)
 
+        # If the game is a draw the player's balance is not affected
+        # If the dealer wins or the player busts the bet is
+        # removed from the players balance
+        # If the player wins or the dealer busts the bet is
+        # added to the players balance.
         if (dealer_value == player_value):
             print(
                 f"Draw. Your bet has been returned.\n"
@@ -486,12 +578,13 @@ def game_start():
             balance = balance + bet
             print(f"You won! \nCurrent balance: {balance}")
 
+        # Saves the game and then waits for user input before clearing screen
         game.save_game(username)
         input("Press enter to continue..")
         os.system("clear")
 
 
-# This code is temporary, but might be reused later
+# Main
 connect_to_DB()
 login_or_create()
 game_start()

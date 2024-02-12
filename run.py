@@ -584,8 +584,6 @@ def game_start():
                     bust = True
             elif ans == "stand":
                 stand = True
-            else:
-                print("Invalid input")
 
             # The board is updated
             print_board(stand, player_cards, dealer_cards)
@@ -615,7 +613,7 @@ def game_start():
             print(
                 f"Draw. Your bet has been returned.\n"
                 "Current balance: {balance}")
-        elif (dealer_value > player_value):
+        elif (dealer_value > player_value and dealer_value <= highest_value):
             balance = balance - bet
             print(f"You lost. \nCurrent balance: {balance}")
         elif (bust):

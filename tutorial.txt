@@ -1,0 +1,27 @@
+How to play:  
+
+Your goal is to try and beat the dealer by having your total  
+amount of cards value be closer to 21 than the dealer's cards  
+
+All face cards have a value of 10. Ace has a value of  
+1 or 11 depending on if your hand exceeds 21. The rest have  
+the same value as the number of the card\n  
+
+You will recieve 2 cards to start with. The dealer will have  
+one card facing up and one card facing down. Based on this  
+you can make a guess of how many points the dealer might have  
+to determine your next move \n 
+You have the option to either hit or stand. If you hit  
+you will be given another card. If you stand the dealer will  
+reveal their hidden card. If the dealer's cards amount  
+to less than 17 they have to hit. If their cards amount to  
+17 or more they have to stand.\n  
+
+A bust is an automatic loss. This is when your total cards  
+exceed the value of 21.\n 
+If you bust you lose. If the dealer busts you win.  
+
+At the start of the game you'll place a bet. If you win you  
+get double your bet back. \n 
+If your two starting cards has a value of 21 you will immediately  
+get 1.5x your bet back. This is called a natural blackjack  

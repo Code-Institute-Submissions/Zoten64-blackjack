@@ -445,17 +445,37 @@ def card_check(timeframe):
     elif (len(deck) < 1):
         deck = custom_deck()
 
+
 def intro():
     '''The intro to the game'''
-    #The ASCII art itself is stored in a txt file
+    # The ASCII art itself is stored in a txt file
     intro_text = open("./intro.txt", "r")
     print(intro_text.read())
     print()
-    input("Press enter to continue")
+    # Wait for the users input before clearing the screen
+    input("Press enter to continue..")
+    os.system("clear")
 
 
 def tutorial():
     '''If the player doesn't know how to play this will be run'''
+
+    # Ask the user if they know how to play until a valid answer is given
+    # If "y", the loop will break
+    # If "n" the tutorial text file will be printed to the console.
+    # .lower() is used for case insensitivity
+    while True:
+        ans = input("Do you know how to play? Y/N: \n").lower()
+        if (ans == "n"):
+            tutorial_text = open("./tutorial.txt", "r")
+            print(tutorial_text.read())
+            input("Press enter to continue..")
+            break
+        elif(ans == "y"):
+            break
+        else:
+            print("invalid choice")
+
 
 def game_start():
     '''
@@ -597,6 +617,10 @@ def game_start():
 
 # Main
 intro()
+tutorial()
+# Clear the console before prompting for a login
+os.system("clear")
+print("Loading database, this might take a few seconds..")
 connect_to_DB()
 login_or_create()
 game_start()

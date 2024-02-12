@@ -338,11 +338,27 @@ def print_board(stand, player_cards, dealer_cards):
         dealer_shown_cards = ["?", dealer_up_card]
         dealer_cards_value = game.calc_value([dealer_up_card], card_value)
 
+    # Makes the cards display as a string instead of a list
+    dealer_cards_clean = ""
+    player_cards_clean = ""
+
+    # Adds the cards to a string to ommit the square brackets and quotes
+    # you get When printing a list
+    for card in dealer_shown_cards:
+        # Encase the card in a pair of lines
+        card_clean = " |" + card + "| "
+        dealer_cards_clean = dealer_cards_clean + card_clean
+
+    for card in player_cards:
+        # Encase the card in a pair of lines
+        card_clean = " |" + card + "| "
+        player_cards_clean = player_cards_clean + card_clean
+
     # Prints the values to the console
-    print("Dealers cards:", dealer_shown_cards)
+    print("Dealers cards:", dealer_cards_clean)
     print("Dealers cards value:", dealer_cards_value)
     print()
-    print("Players cards:", player_cards)
+    print("Players cards:", player_cards_clean)
     print("Player cards value:", player_cards_value)
     print()
     print("Cards left:", len(deck))
@@ -471,7 +487,7 @@ def tutorial():
             print(tutorial_text.read())
             input("Press enter to continue..")
             break
-        elif(ans == "y"):
+        elif (ans == "y"):
             break
         else:
             print("invalid choice")

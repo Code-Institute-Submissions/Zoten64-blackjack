@@ -40,7 +40,8 @@ dealers_score = 0
 players_score = 0
 balance = 1000
 deck_count = 1
-global deck
+deck = []
+username = ""
 
 
 # Objects/classes
@@ -69,18 +70,18 @@ class account:
         # In this case return makes the function stop running
         username = account.create_username()
         if (username == "interrupted"):
-            return
+            return "unsuccessful"
 
         password = account.create_password()
         if (password == "interrupted"):
-            return
+            return "unsuccessful"
         else:
             # The data is made into a dictionary and put into the db
             data = {"username": username,
                     "password": password,
                     "balance": balance}
             db["player"].insert_one(data)
-            return "success"
+            return username
 
     def create_username():
         '''Lets user create a username'''
@@ -231,8 +232,11 @@ class game:
 
         return total_value
 
-    def save_game(credits, username):
+    def save_game(username):
         '''Saves the amount of credits the user has'''
+        db["player"].update_one({"username" : username}, 
+                                {"$set": {"balance" : balance}})
+
 
     def get_saved_game(username):
         '''Gets any save info the player has'''
@@ -261,9 +265,8 @@ def connect_to_DB():
 
 def print_board(state, player_cards, dealer_cards):
     '''
-    Prints the board. The cards var requires a list where [0] is the
-    player's cards and [1] is the dealers cards. State = if the dealer
-    should reveal their hidden card, ie if the player has decided to stand
+    Prints the board. State = if the dealer should reveal their hidden card, 
+    ie if the player has decided to stand
     '''
     # Starts by clearing the terminal
     os.system('clear')
@@ -273,7 +276,6 @@ def print_board(state, player_cards, dealer_cards):
     dealer_cards_value = 0
 
     dealer_up_card = dealer_cards[0]
-    dealer_hidden_card = dealer_cards[1]
 
     # if state == True the player has decided to stand
     if (state == True):
@@ -339,14 +341,18 @@ def login_or_create():
     until a valid answer has been given
     '''
     while True:
+        global username
+
         ans = input("Login or Create account?: \n"
                     "Options: \n - login \n - create \n")
 
         if ans.lower() == "login":
-            if account.log_in() != "unsuccessful":
+            username = account.log_in()
+            if username != "unsuccessful":
                 break
         elif ans.lower() == "create":
-            if account.create_account() == "success":
+            username = account.create_account() 
+            if username != "unsuccessful":
                 break
         else:
             print("Invalid choice")
@@ -477,11 +483,12 @@ def game_start():
             balance = balance + bet
             print(f"You won! \nCurrent balance: {balance}")
 
+        game.save_game(username)
         input("Press enter to continue..")
         os.system("clear")
 
 
 # This code is temporary, but might be reused later
-#connect_to_DB()
-#login_or_create()
+connect_to_DB()
+login_or_create()
 game_start()

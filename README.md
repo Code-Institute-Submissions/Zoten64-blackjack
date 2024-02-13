@@ -1,5 +1,7 @@
 # Blackjack in a Python console
 
+<img src="documentation\cover.png">
+
 ## [Link to website](https://zoten64-blackjack-f933aa260542.herokuapp.com/)
 
 ## Table of Contents:
@@ -31,6 +33,108 @@ The target audience is that of an audience interested in playing blackjack with 
 6. As a player I want to see the total value of my cards to make it easier to play without counting manually
 
 ## Features
+
+**Welcome screen**
+
+A simple welcome screen that consists of ASCII text displaying "BlackJack". The game will only progress once the player has pressed enter
+
+
+<img src="documentation/welcome.png">
+
+<br>
+
+User stories covered: none
+
+**Rules display**
+
+At the begginning of the app it will ask you if you know how to play. If you say no it will display a wall of text of rules
+
+
+<img src="documentation/rules.png">
+
+
+User stories covered: 3
+
+<br>
+
+**Account system that saves your balance**
+
+You can both create an account and log in at the start of the game. The data is stored securely in a MongoDB Atlas database. The passwords stored are hashed.
+
+
+<img src="documentation/account_system.png">
+
+
+Image below of the database entry showing the stored balance
+<img src="documentation/database.png">
+
+<br>
+
+**Custom Deck options**
+
+After the login the player will be prompted to choose a number of decks to play with. In real life casinos they usually use 6 decks to make certain strategies harder to pull off, such as card counting where the player keeps an eye on what cards are left in the deck and therefor betting higher when there's a higher chance of getting winning cards, and vice versa
+
+<img src="documentation/decks.png">
+
+
+User stories covered: none
+
+<br>
+
+**Betting**
+
+The game gives the player the option to choose how much to bet. If their balance have reached 0, the game will automatically give them 100 free credits to be able to continue playing.
+
+<img src="documentation/betting.png">
+
+<img src="documentation/second_chance.png">
+
+
+User stories covered: 1
+
+<br>
+
+**The board, hitting and standing**
+
+
+The player is given the choice to hit or stand. Both the player and dealer starts with 2 cards. One of the dealer's cards is hidden, from the user. The user has to guess what that card might be and make a guess based on that. Hitting means the player gains another card, adding to their total value. Standing means it's the dealer's turn.
+The game will also display how many cards are left in a deck.
+
+
+<img src="documentation/game.png">
+
+
+User stories covered: 2, 5, 6
+<br>
+
+**The Dealer's turn**
+
+Once it's the dealer's turn they will reveal their hidden card. If their own value is below 17 they will be forced to pick up cards until they reach 17 or above.
+
+<img src="documentation/dealer.png">
+
+<br>
+
+**Busting**
+
+Both the Dealer and the player has the ability to bust. This is when either of their values go over 21. A bust is an automatic loss for the one who went over 21.
+
+<img src="documentation/dealer_bust.png">
+
+<img src="documentation/player_bust.png">
+
+<br>
+
+**Balance**
+
+The player's balance will be displayed at the end of each round.
+
+<img src="documentation/balance.png">
+
+
+User stories covered: 4
+
+<br>
 
 
 ## Bugs and fixes

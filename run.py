@@ -1,6 +1,3 @@
-# To do:
-# - Separate game_start() into different functions for better readability
-
 # Import statements
 import random
 import os

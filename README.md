@@ -31,6 +31,7 @@ The target audience is that of an audience interested in playing blackjack with 
 4. As a player I want to know what my current balance is so I know if I've won or lost credits
 5. As a player I want to know if I've won or lost
 6. As a player I want to see the total value of my cards to make it easier to play without counting manually
+7. As a player I want to be able to save my progress so I can access it later
 
 ## Features
 
@@ -68,6 +69,8 @@ You can both create an account and log in at the start of the game. The data is 
 Image below of the database entry showing the stored balance
 <img src="documentation/database.png">
 
+User stories covered: 7
+
 <br>
 
 **Custom Deck options**
@@ -77,7 +80,7 @@ After the login the player will be prompted to choose a number of decks to play 
 <img src="documentation/decks.png">
 
 
-User stories covered: none
+User stories covered: None
 
 <br>
 
@@ -125,6 +128,8 @@ Both the Dealer and the player has the ability to bust. This is when either of t
 
 <br>
 
+User stories covered: None
+
 **Balance**
 
 The player's balance will be displayed at the end of each round.
@@ -151,6 +156,8 @@ User stories covered: 4
 | Player wins when the dealer should | accidentally used ">" instead of "<" |
 | Player/dealer still bust even if value does not exceed 21 when cards include an Ace due to an Ace counting as 1 when the total value exceeds 21 when the Ace is worth 11 | Change the way the value is calculated by removing 10 when the total value exceeds 21 and there is an ace in the deck | 
 | Dealer wins even though they have bust if their card value is higher than the players | Added additional check to make sure the dealer can't win if they bust |
+| Balance sometimes displays as {balance} and not as the actual number during a draw | misplaced f in front of the text |
+
 
 ## Technologies and tools
 **Languages**
@@ -206,6 +213,99 @@ As far as I am aware, the program works like it should.
 <br>
 
 **Testing user stories**
+
+1. As a player I want to be able to place a bet so I can start the round with a specific wager
+
+| Feature  | Action | Expected results | Actual results |
+| ------------- | ------------- | ------------- | ------------- |
+| A function to place a bet at the start of each round | Play the game and enter the amount you want to bed when asked | The bet the player has entered will be added/removed upon a win/loss | Works as expected |
+
+<details>
+<summary>Screenshots</summary>
+<img src="documentation/user_stories/us_bet.png">
+</details>
+
+
+<br>
+
+2. As an advanced player I want to know how many cards are in the deck so I can calculate the best outcome
+
+| Feature  | Action | Expected results | Actual results |
+| ------------- | ------------- | ------------- | ------------- |
+| Once the game starts the amount of cards will be displayed | play the game | The amount of cards left will be printed to the console | Works as expected |
+
+<details>
+<summary>Screenshots</summary>
+<img src="documentation/user_stories/us_cards_left.png">
+</details>
+
+<br>
+
+3. As a begginner I want to know the rules of the game so I know how to play. 
+
+| Feature  | Action | Expected results | Actual results |
+| ------------- | ------------- | ------------- | ------------- |
+| The game asks if you know how to play in the begginning | At the start of the game, when asked if you know how to play, write "n" and press enter | Rules should be displayed | Works as expected |
+
+<details>
+<summary>Screenshots</summary>
+<img src="documentation/user_stories/us_rules.png">
+</details>
+
+<br>
+
+4. As a player I want to know what my current balance is so I know if I've won or lost credits
+
+| Feature  | Action | Expected results | Actual results |
+| ------------- | ------------- | ------------- | ------------- |
+| The current balance is displayed at the end of a game as well as when asked how much you want to bet | Place a bet or finish a game | The current balance will display | Works as expected |
+
+<details>
+<summary>Screenshots</summary>
+<img src="documentation/user_stories/us_balance_1.png">
+<img src="documentation/user_stories/us_balance_2.png">
+</details>
+
+<br>
+
+5. As a player I want to know if I've won or lost
+
+| Feature  | Action | Expected results | Actual results |
+| ------------- | ------------- | ------------- | ------------- |
+| The game tells you if you've won, lost or if the game ended in a draw at the end | Finish a game | The game telling you if you've won, lost or got a draw | Works as expected |
+
+<details>
+<summary>Screenshots</summary>
+<img src="documentation/user_stories/us_result.png">
+</details>
+
+<br>
+
+6. As a player I want to see the total value of my cards to make it easier to play without counting manually
+
+| Feature  | Action | Expected results | Actual results |
+| ------------- | ------------- | ------------- | ------------- |
+| Underneath your displayed cards the total value of your hand will be displayed | Play the game | A display of the value of the cards | Works as expected |
+
+<details>
+<summary>Screenshots</summary>
+<img src="documentation/user_stories/us_card_value.png">
+</details>
+
+<br>
+
+7. As a player I want to be able to save my progress so I can access it later
+
+| Feature  | Action | Expected results | Actual results |
+| ------------- | ------------- | ------------- | ------------- |
+| Save function that saves your balance to the database after each game | Finish a game | The balance will be changed to the current one in the database | Works as expected |
+
+<details>
+<summary>Screenshots</summary>
+<img src="documentation/user_stories/us_save.png">
+</details>
+
+<br>
 
 ## Deployment
 

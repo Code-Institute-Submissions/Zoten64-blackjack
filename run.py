@@ -608,8 +608,8 @@ def game_start():
         # added to the players balance.
         if (dealer_value == player_value):
             print(
-                f"Draw. Your bet has been returned.\n"
-                "Current balance: {balance}")
+                "Draw. Your bet has been returned.\n"
+                f"Current balance: {balance}")
         elif (dealer_value > player_value and dealer_value <= highest_value):
             balance = balance - bet
             print(f"You lost. \nCurrent balance: {balance}")

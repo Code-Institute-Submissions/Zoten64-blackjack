@@ -116,6 +116,8 @@ Once it's the dealer's turn they will reveal their hidden card. If their own val
 
 <img src="documentation/dealer.png">
 
+
+User stories covered: None
 <br>
 
 **Busting**
@@ -139,8 +141,18 @@ The player's balance will be displayed at the end of each round.
 
 User stories covered: 4
 
-<br>
+<br> 
 
+
+**Unit testing**
+
+The repository also comes with 3 unit tests in the test_run.py file
+
+<img src="documentation/unittest.png">
+
+
+User stories covered: None
+<br>
 
 ## Bugs and fixes
 
@@ -318,14 +330,62 @@ Prerequisities:
 Steps:
 - From the dashboard (First page after logging in), click "new" button on the top right
 - Click "Create new app"
+
+<details>
+<summary>Screenshots</summary>
+<img src="documentation/heroku_deploy/step1.png" width="1000">
+</details>
+
+<br>
+
 - Give it a name and a region (I chose Europe as I am in Europe)
 - Click "Create App"
+
+<details>
+<summary>Screenshots</summary>
+<img src="documentation/heroku_deploy/step2.png" width="1000">
+</details>
+
+<br>
+
 - You will be taken to the "Deploy" tab in your project. From there, under "Deployment method", click "Github".
+
+<details>
+<summary>Screenshots</summary>
+<img src="documentation/heroku_deploy/step3.png" width="1000">
+</details>
+
+<br>
+
 - Enter the name of your repository and click "search"
 - Click "connect" besides the repository you want to deploy
+
+<details>
+<summary>Screenshots</summary>
+<img src="documentation/heroku_deploy/step4.png" width="1000">
+</details>
+
+<br>
+
 - At the very bottom, click "Deploy Branch"
 - Wait for the project to be built
 - When done a button at the bottom with the text "view" should appear
+
+<details>
+<summary>Screenshots</summary>
+<img src="documentation/heroku_deploy/step5.png" width="1000">
+</details>
+
+
+To access your app at any time, there's a button on the top of the same page called "open app"
+
+<details>
+<summary>Screenshots</summary>
+<img src="documentation/heroku_deploy/step6.png" width="1000">
+</details>
+
+<br>
+
 
 **How to fork the project**
 

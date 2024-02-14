@@ -328,6 +328,10 @@ Prerequisities:
 - Having a project to deploy pushed to github
 
 Steps:
+
+Creating the app:
+
+
 - From the dashboard (First page after logging in), click "new" button on the top right
 - Click "Create new app"
 
@@ -367,6 +371,37 @@ Steps:
 
 <br>
 
+- Now go to settings and scroll down to "buildpacks"
+- Click "Add buildpacks"
+- Select the buildpack you want to use. I will use Node.js
+- See what buildpacks you have installed
+
+<details>
+<summary>Screenshots</summary>
+<img src="documentation/heroku_deploy/step5.png" width="1000">
+<img src="documentation/heroku_deploy/step6.png" width="1000">
+</details>
+
+<br>
+
+(Optional) If you have any environment variables that needs to be added, such as credentials, you'll do that here:
+
+
+- Scroll up slightly and click "Reveal config vars"
+- There should be two fields, one with the placeholder "Key" and one with "Value"
+- Enter your variable name and the value of that variable
+- Click "Add"
+- You should now see the variable in the list.
+
+<details>
+<summary>Screenshots</summary>
+<img src="documentation/heroku_deploy/optional_env_var.png" width="1000">
+</details>
+
+<br>
+
+Deploying: 
+
 - At the very bottom, click "Deploy Branch"
 - Wait for the project to be built
 - When done a button at the bottom with the text "view" should appear
@@ -376,6 +411,7 @@ Steps:
 <img src="documentation/heroku_deploy/step5.png" width="1000">
 </details>
 
+<br>
 
 To access your app at any time, there's a button on the top of the same page called "open app"
 
@@ -385,6 +421,8 @@ To access your app at any time, there's a button on the top of the same page cal
 </details>
 
 <br>
+
+
 
 
 **How to fork the project**

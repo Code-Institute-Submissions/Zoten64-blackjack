@@ -7,6 +7,7 @@
 ## Table of Contents:
 
 * [Goals and target audience](#goals-and-target-audience)
+* [User Manual](#user-manual)
 * [User stories](#user-stories)
 * [Features](#features)
 * [Bugs and fixes](#bugs-and-fixes)
@@ -22,6 +23,22 @@ The goal of the project is to make a classic game of blackjack in a python conso
 It is a classic game of blackjack. You're supposed to get as close to 21 as possible without busting (Going over 21). The dealer will start with two cards, one up and one down, and it is your job to try and guess what the hidden card might be in order to beat the dealer at the game.
 
 The target audience is that of an audience interested in playing blackjack with no real stakes as all money is fictional. As this is a game made to run in a console, no GUI is required
+
+## User Manual
+
+The app works in the following ways
+
+- Once the app loads you are presented with a start screen displaying the name of the game in ASCII art and a prompt to press enter to start
+- When you continue from the start screen you are asked if you know how to play the game. Answering no ("n") will show you the rules of the game. The app waits for the user to press enter before continuing in order to give the player the chance to read
+- Next the user is prompted to log in or create an account. This is to be able to save progress
+- After that the user is asked to choose a number of decks to play with. Typically when playing at a casino they will use multiple shuffled decks to make the card counting strategy (when you count the amount of one type of card to be able to estimate what cards are left in the card pool) harder for the player. Cancelling will start the game with the default amount of cards being 6.
+- The player is given a choice on how much to bet
+- When the game starts the player will be given two cards. The Dealer will have 2 cards as well, one of them face down, effectively hiding it.
+- The user is given the choice to hit or stand. Hitting gives the player another card, standing means the players turn is over. The goal is to get closer to 21 than the dealer without going over 21. Ace is worth 11 or 1 depending on if the player's or dealer's hand is over 21 or not. Face cards (King, Queen, Jack) are worth 10. All other cards are worth the same as their number
+- Once the player is done it's the dealers turn. The dealer reveals their card. If their cards total value is below 17 they will draw more cards until they hit 17 or more.
+- If the player busts (going over 21) it's an automatic loss. If the dealer busts it's a win.
+- After a loss, win or draw the game saves your current balance to the database and waits for the player to press enter before asking them to bet again and then repeating the game.
+
 
 ## User stories
 
@@ -185,14 +202,27 @@ User stories covered: None
 - Lucidchart
 
 **Python Libraries**
+
+Built in:
+
 - Random
 - OS
-- Python-dotenv
+
+3rd party:
+
+- python-dotenv
 - pymongo
 - dnspython
 - pwinput
 - bcrypt
 
+Explaination:
+
+- python-dotenv was used to be able to load a .env file containing credentials that should not be pushed onto Github for security reasons
+- pymongo was used to be able to access the mongoDB database API
+- dnspython is a pymongo dependency
+- pwinput was used to mask the password when the user types it, aka turn the letters/numbers/symbols into * when the user types
+- bcrypt was used to hash the passwords as storing passwords in plain text is a bad practice
 
 ## Technical Design
 

@@ -374,7 +374,7 @@ Creating the app:
 - Now go to settings and scroll down to "buildpacks"
 - Click "Add buildpacks"
 - Select the buildpack you want to use. I will use Node.js
-- See what buildpacks you have installed
+- You can now see what buildpacks are installed
 
 <details>
 <summary>Screenshots</summary>
@@ -408,7 +408,7 @@ Deploying:
 
 <details>
 <summary>Screenshots</summary>
-<img src="documentation/heroku_deploy/step5.png" width="1000">
+<img src="documentation/heroku_deploy/step7.png" width="1000">
 </details>
 
 <br>
@@ -417,7 +417,7 @@ To access your app at any time, there's a button on the top of the same page cal
 
 <details>
 <summary>Screenshots</summary>
-<img src="documentation/heroku_deploy/step6.png" width="1000">
+<img src="documentation/heroku_deploy/step8.png" width="1000">
 </details>
 
 <br>

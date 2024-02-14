@@ -627,11 +627,14 @@ def game_start():
 
 
 # Main
-intro()
-tutorial()
-# Clear the console before prompting for a login
-os.system("clear")
-print("Loading database, this might take a few seconds..")
-connect_to_DB()
-login_or_create()
-game_start()
+# The if statement makes sure that the script only runs when called directly
+# and not when imported
+if __name__ == '__main__':
+    intro()
+    tutorial()
+    # Clear the console before prompting for a login
+    os.system("clear")
+    print("Loading database, this might take a few seconds..")
+    connect_to_DB()
+    login_or_create()
+    game_start()
